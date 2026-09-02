@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "slideshow_XCrVhF": {
@@ -50,7 +59,7 @@
           "type": "text",
           "settings": {
             "enlarge_text": true,
-            "text": "<p>FLAVE began in the simplest way making homemade food for friends and family. What started as a few small batches quickly became something people kept coming back for and sharing with others.<br/><br/>From the very beginning, we've believed that great food should be as beautiful as it is delicious. Carefully selected ingredients, thoughtful presentation, and handcrafted quality remain at the heart of everything we make.<br/><br/>Today, every batch of FLAVE granola is crafted with the same care as those first homemade recipes\u2014using quality ingredients, baked in small batches, and made to bring a little joy to everyday moments.<br/><br/>Welcome to FLAVE. We hope every bite is one you'll look forward to.</p>"
+            "text": "<p>FLAVE began in the simplest way making homemade food for friends and family. What started as a few small batches quickly became something people kept coming back for and sharing with others.<br/><br/>From the very beginning, we've believed that great food should be as beautiful as it is delicious. Carefully selected ingredients, thoughtful presentation, and handcrafted quality remain at the heart of everything we make.<br/><br/>Today, every batch of FLAVE granola is crafted with the same care as those first homemade recipes—using quality ingredients, baked in small batches, and made to bring a little joy to everyday moments.<br/><br/>Welcome to FLAVE. We hope every bite is one you'll look forward to.</p>"
           }
         },
         "button_VXU6rP": {
@@ -67,7 +76,6 @@
         "text_FCDJV6",
         "button_VXU6rP"
       ],
-      "disabled": true,
       "name": "t:sections.rich-text.presets.rich_text.name",
       "settings": {
         "align_text": "center",
