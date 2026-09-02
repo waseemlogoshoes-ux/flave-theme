@@ -1,1 +1,54 @@
-{"current":{"color_body_bg":"#faf6f0","color_body_text":"#2c2017","color_price":"#6b2737","color_borders":"#2c2017","color_button":"#6b2737","color_button_text":"#faf6f0","color_sale_tag":"#6b2737","color_sale_tag_text":"#faf6f0","color_cart_dot":"#7a8c6e","color_small_image_bg":"#faf6f0","color_header":"#faf6f0","color_header_text":"#6b2737","color_announcement":"#6b2737","color_announcement_text":"#faf6f0","color_footer":"#7A8C6E","color_footer_text":"#faf6f0","color_drawer_background":"#faf6f0","color_drawer_text":"#2c2017","color_drawer_border":"#e8e0d5","color_drawer_button":"#6b2737","color_drawer_button_text":"#faf6f0","color_modal_overlays":"#000000","color_image_text":"#faf6f0","type_header_font_family":"playfair_display_n4","type_header_spacing":"25","type_header_base_size":36,"type_header_capitalize":true,"type_base_font_family":"dm_sans_n4","type_base_line_height":1,"type_navigation_style":"heading","type_navigation_size":12,"type_navigation_capitalize":true,"type_product_style":"body","cart_icon":"bag","social_instagram_link":"https:\/\/www.instagram.com\/flavebyanabsalman","disable_animations":false,"content_for_index":[]},"presets":{"Autonex":{}}}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "color_body_bg": "#faf6f0",
+    "color_body_text": "#2c2017",
+    "color_price": "#6b2737",
+    "color_borders": "#2c2017",
+    "color_button": "#7A8C6E",
+    "color_button_text": "#faf6f0",
+    "color_sale_tag": "#6b2737",
+    "color_sale_tag_text": "#faf6f0",
+    "color_cart_dot": "#7a8c6e",
+    "color_small_image_bg": "#faf6f0",
+    "color_header": "#faf6f0",
+    "color_header_text": "#6b2737",
+    "color_announcement": "#6b2737",
+    "color_announcement_text": "#faf6f0",
+    "color_footer": "#7A8C6E",
+    "color_footer_text": "#faf6f0",
+    "color_drawer_background": "#faf6f0",
+    "color_drawer_text": "#2c2017",
+    "color_drawer_border": "#e8e0d5",
+    "color_drawer_button": "#6b2737",
+    "color_drawer_button_text": "#faf6f0",
+    "color_modal_overlays": "#000000",
+    "color_image_text": "#faf6f0",
+    "type_header_font_family": "playfair_display_n4",
+    "type_header_spacing": "25",
+    "type_header_base_size": 36,
+    "type_header_line_height": 1,
+    "type_header_capitalize": true,
+    "type_base_font_family": "dm_sans_n4",
+    "type_base_line_height": 1.5,
+    "type_navigation_style": "heading",
+    "type_navigation_size": 12,
+    "type_navigation_capitalize": true,
+    "type_product_style": "body",
+    "cart_icon": "bag",
+    "social_instagram_link": "https://www.instagram.com/flavebyanabsalman",
+    "disable_animations": false,
+    "content_for_index": []
+  },
+  "presets": {
+    "Autonex": {}
+  }
+}
