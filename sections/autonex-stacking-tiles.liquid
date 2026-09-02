@@ -1,0 +1,129 @@
+<div class="atx-scroll-block" style="position:relative;z-index:{{ section.settings.z_index }};">
+  <div class="atx-sticky-frame" style="z-index:{{ section.settings.z_index }};">
+    <div class="atx-scene atx-tiles">
+
+      <!-- Mobile image CSS overrides -->
+      {% if section.settings.tile1_image_mobile != blank or section.settings.tile2_image_mobile != blank %}
+      <style>
+        @media(max-width:768px){
+          {% if section.settings.tile1_image_mobile != blank %}
+          .atx-tile-1-{{ section.id }}{background-image:url('{{ section.settings.tile1_image_mobile | image_url: width: 600 }}') !important;}
+          {% endif %}
+          {% if section.settings.tile2_image_mobile != blank %}
+          .atx-tile-2-{{ section.id }}{background-image:url('{{ section.settings.tile2_image_mobile | image_url: width: 600 }}') !important;}
+          {% endif %}
+        }
+      </style>
+      {% endif %}
+
+      <a href="{{ section.settings.tile1_url }}" class="atx-tile atx-tile-1-{{ section.id }}"
+        {% if section.settings.tile1_image != blank %}
+          style="background-image:url('{{ section.settings.tile1_image | image_url: width: 960 }}');"
+        {% else %}
+          style="background:linear-gradient(155deg,#1c1712,#3d2e1c 65%,#14110e);"
+        {% endif %}>
+        <div class="atx-tile-label">
+          <h3>{{ section.settings.tile1_heading | default: 'Category One' }}</h3>
+          <span class="atx-tile-cta">{{ section.settings.tile1_cta | default: 'Explore' }}</span>
+        </div>
+      </a>
+
+      <a href="{{ section.settings.tile2_url }}" class="atx-tile atx-tile-2-{{ section.id }}"
+        {% if section.settings.tile2_image != blank %}
+          style="background-image:url('{{ section.settings.tile2_image | image_url: width: 960 }}');"
+        {% else %}
+          style="background:linear-gradient(205deg,#191511,#2c2014 60%,#100f0d);"
+        {% endif %}>
+        <div class="atx-tile-label">
+          <h3>{{ section.settings.tile2_heading | default: 'Category Two' }}</h3>
+          <span class="atx-tile-cta">{{ section.settings.tile2_cta | default: 'Discover' }}</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Autonex Stacking Tiles",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "range",
+      "id": "z_index",
+      "min": 10, "max": 90, "step": 10,
+      "label": "Stack Order",
+      "default": 20,
+      "info": "Must be higher than previous section"
+    },
+    {
+      "type": "header",
+      "content": "Left Tile"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile1_image",
+      "label": "Left — Desktop Image",
+      "info": "960×1080px recommended"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile1_image_mobile",
+      "label": "Left — Mobile Image",
+      "info": "600×800px recommended"
+    },
+    {
+      "type": "text",
+      "id": "tile1_heading",
+      "label": "Left Heading",
+      "default": "Bags"
+    },
+    {
+      "type": "text",
+      "id": "tile1_cta",
+      "label": "Left CTA Text",
+      "default": "Explore"
+    },
+    {
+      "type": "url",
+      "id": "tile1_url",
+      "label": "Left Link"
+    },
+    {
+      "type": "header",
+      "content": "Right Tile"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile2_image",
+      "label": "Right — Desktop Image",
+      "info": "960×1080px recommended"
+    },
+    {
+      "type": "image_picker",
+      "id": "tile2_image_mobile",
+      "label": "Right — Mobile Image",
+      "info": "600×800px recommended"
+    },
+    {
+      "type": "text",
+      "id": "tile2_heading",
+      "label": "Right Heading",
+      "default": "Footwear"
+    },
+    {
+      "type": "text",
+      "id": "tile2_cta",
+      "label": "Right CTA Text",
+      "default": "Discover"
+    },
+    {
+      "type": "url",
+      "id": "tile2_url",
+      "label": "Right Link"
+    }
+  ],
+  "presets": [{"name": "Autonex Stacking Tiles"}]
+}
+{% endschema %}

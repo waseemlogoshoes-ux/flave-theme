@@ -1,0 +1,589 @@
+{% doc %}
+  @prompt
+    i need video bloack  2 option ke sath mobile & dextop
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-video-block-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-video-container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-video-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+    border-radius: {{ block.settings.border_radius }}px;
+    background-color: #000;
+  }
+
+  .ai-video-element-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-video-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    color: #666;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .ai-video-placeholder-{{ ai_gen_id }} svg {
+    width: 80px;
+    height: 80px;
+    opacity: 0.5;
+  }
+
+  .ai-video-controls-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 2;
+  }
+
+  .ai-video-play-button-{{ ai_gen_id }} {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: rgba({{ block.settings.control_color | color_extract: 'red' }}, {{ block.settings.control_color | color_extract: 'green' }}, {{ block.settings.control_color | color_extract: 'blue' }}, 0.9);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: {{ block.settings.control_icon_color }};
+  }
+
+  .ai-video-play-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.control_color }};
+    transform: scale(1.1);
+  }
+
+  .ai-video-play-button-{{ ai_gen_id }} svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-video-mute-button-{{ ai_gen_id }} {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba({{ block.settings.control_color | color_extract: 'red' }}, {{ block.settings.control_color | color_extract: 'green' }}, {{ block.settings.control_color | color_extract: 'blue' }}, 0.7);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: {{ block.settings.control_icon_color }};
+  }
+
+  .ai-video-mute-button-{{ ai_gen_id }}:hover {
+    background-color: rgba({{ block.settings.control_color | color_extract: 'red' }}, {{ block.settings.control_color | color_extract: 'green' }}, {{ block.settings.control_color | color_extract: 'blue' }}, 0.9);
+  }
+
+  .ai-video-mute-button-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ai-video-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, {{ block.settings.overlay_opacity | divided_by: 100.0 }}) 100%
+    );
+    pointer-events: none;
+  }
+
+  .ai-video-content-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: {{ block.settings.text_color }};
+    z-index: 2;
+    max-width: 80%;
+  }
+
+  .ai-video-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .ai-video-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-video-container-{{ ai_gen_id }} {
+      padding: 0 15px;
+    }
+
+    .ai-video-play-button-{{ ai_gen_id }} {
+      width: 50px;
+      height: 50px;
+    }
+
+    .ai-video-play-button-{{ ai_gen_id }} svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .ai-video-mute-button-{{ ai_gen_id }} {
+      width: 40px;
+      height: 40px;
+    }
+
+    .ai-video-mute-button-{{ ai_gen_id }} svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ai-video-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+    }
+
+    .ai-video-description-{{ ai_gen_id }} {
+      font-size: {{ block.settings.description_size | times: 0.9 }}px;
+    }
+
+    .ai-video-content-{{ ai_gen_id }} {
+      max-width: 90%;
+    }
+  }
+
+  .ai-video-hidden-{{ ai_gen_id }} {
+    display: none;
+  }
+{% endstyle %}
+
+<video-player-{{ ai_gen_id }}
+  class="ai-video-block-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-video-container-{{ ai_gen_id }}">
+    <div class="ai-video-wrapper-{{ ai_gen_id }}">
+      {% if block.settings.video_desktop != blank or block.settings.video_mobile != blank %}
+        {% if block.settings.video_desktop != blank %}
+          <video
+            class="ai-video-element-{{ ai_gen_id }} ai-video-desktop-{{ ai_gen_id }}"
+            {% if block.settings.autoplay %}autoplay{% endif %}
+            {% if block.settings.loop %}loop{% endif %}
+            {% if block.settings.muted %}muted{% endif %}
+            playsinline
+            preload="metadata"
+            data-video-type="desktop"
+          >
+            <source src="{{ block.settings.video_desktop }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% endif %}
+
+        {% if block.settings.video_mobile != blank %}
+          <video
+            class="ai-video-element-{{ ai_gen_id }} ai-video-mobile-{{ ai_gen_id }} ai-video-hidden-{{ ai_gen_id }}"
+            {% if block.settings.autoplay %}autoplay{% endif %}
+            {% if block.settings.loop %}loop{% endif %}
+            {% if block.settings.muted %}muted{% endif %}
+            playsinline
+            preload="metadata"
+            data-video-type="mobile"
+          >
+            <source src="{{ block.settings.video_mobile }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% endif %}
+
+        {% if block.settings.show_overlay %}
+          <div class="ai-video-overlay-{{ ai_gen_id }}"></div>
+        {% endif %}
+
+        {% if block.settings.title != blank or block.settings.description != blank %}
+          <div class="ai-video-content-{{ ai_gen_id }}">
+            {% if block.settings.title != blank %}
+              <h2 class="ai-video-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+            {% endif %}
+            {% if block.settings.description != blank %}
+              <p class="ai-video-description-{{ ai_gen_id }}">{{ block.settings.description }}</p>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if block.settings.show_controls %}
+          <div class="ai-video-controls-{{ ai_gen_id }}">
+            <button class="ai-video-play-button-{{ ai_gen_id }}" aria-label="Play/Pause video">
+              <svg class="ai-video-play-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+              <svg class="ai-video-pause-icon-{{ ai_gen_id }} ai-video-hidden-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+              </svg>
+            </button>
+            <button class="ai-video-mute-button-{{ ai_gen_id }}" aria-label="Mute/Unmute video">
+              <svg class="ai-video-sound-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+              </svg>
+              <svg class="ai-video-mute-icon-{{ ai_gen_id }} ai-video-hidden-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+              </svg>
+            </button>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="ai-video-placeholder-{{ ai_gen_id }}">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+            </svg>
+            <p>Add videos for desktop and mobile</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</video-player-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class VideoPlayer{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.isMobile = window.innerWidth <= 768;
+        this.currentVideo = null;
+      }
+
+      connectedCallback() {
+        this.setupVideos();
+        this.setupControls();
+        this.handleResize();
+      }
+
+      setupVideos() {
+        this.desktopVideo = this.querySelector('.ai-video-desktop-{{ ai_gen_id }}');
+        this.mobileVideo = this.querySelector('.ai-video-mobile-{{ ai_gen_id }}');
+        
+        this.switchVideo();
+      }
+
+      switchVideo() {
+        const shouldUseMobile = window.innerWidth <= 768;
+        
+        if (shouldUseMobile && this.mobileVideo) {
+          if (this.desktopVideo) {
+            this.desktopVideo.classList.add('ai-video-hidden-{{ ai_gen_id }}');
+            this.desktopVideo.pause();
+          }
+          this.mobileVideo.classList.remove('ai-video-hidden-{{ ai_gen_id }}');
+          this.currentVideo = this.mobileVideo;
+        } else if (this.desktopVideo) {
+          if (this.mobileVideo) {
+            this.mobileVideo.classList.add('ai-video-hidden-{{ ai_gen_id }}');
+            this.mobileVideo.pause();
+          }
+          this.desktopVideo.classList.remove('ai-video-hidden-{{ ai_gen_id }}');
+          this.currentVideo = this.desktopVideo;
+        }
+      }
+
+      setupControls() {
+        this.playButton = this.querySelector('.ai-video-play-button-{{ ai_gen_id }}');
+        this.muteButton = this.querySelector('.ai-video-mute-button-{{ ai_gen_id }}');
+        this.playIcon = this.querySelector('.ai-video-play-icon-{{ ai_gen_id }}');
+        this.pauseIcon = this.querySelector('.ai-video-pause-icon-{{ ai_gen_id }}');
+        this.soundIcon = this.querySelector('.ai-video-sound-icon-{{ ai_gen_id }}');
+        this.muteIcon = this.querySelector('.ai-video-mute-icon-{{ ai_gen_id }}');
+
+        if (this.playButton) {
+          this.playButton.addEventListener('click', () => this.togglePlay());
+        }
+
+        if (this.muteButton) {
+          this.muteButton.addEventListener('click', () => this.toggleMute());
+        }
+
+        if (this.currentVideo) {
+          this.currentVideo.addEventListener('play', () => this.updatePlayButton(true));
+          this.currentVideo.addEventListener('pause', () => this.updatePlayButton(false));
+          this.currentVideo.addEventListener('volumechange', () => this.updateMuteButton());
+        }
+      }
+
+      togglePlay() {
+        if (!this.currentVideo) return;
+
+        if (this.currentVideo.paused) {
+          this.currentVideo.play();
+        } else {
+          this.currentVideo.pause();
+        }
+      }
+
+      toggleMute() {
+        if (!this.currentVideo) return;
+
+        this.currentVideo.muted = !this.currentVideo.muted;
+      }
+
+      updatePlayButton(isPlaying) {
+        if (!this.playIcon || !this.pauseIcon) return;
+
+        if (isPlaying) {
+          this.playIcon.classList.add('ai-video-hidden-{{ ai_gen_id }}');
+          this.pauseIcon.classList.remove('ai-video-hidden-{{ ai_gen_id }}');
+        } else {
+          this.playIcon.classList.remove('ai-video-hidden-{{ ai_gen_id }}');
+          this.pauseIcon.classList.add('ai-video-hidden-{{ ai_gen_id }}');
+        }
+      }
+
+      updateMuteButton() {
+        if (!this.soundIcon || !this.muteIcon || !this.currentVideo) return;
+
+        if (this.currentVideo.muted) {
+          this.soundIcon.classList.add('ai-video-hidden-{{ ai_gen_id }}');
+          this.muteIcon.classList.remove('ai-video-hidden-{{ ai_gen_id }}');
+        } else {
+          this.soundIcon.classList.remove('ai-video-hidden-{{ ai_gen_id }}');
+          this.muteIcon.classList.add('ai-video-hidden-{{ ai_gen_id }}');
+        }
+      }
+
+      handleResize() {
+        window.addEventListener('resize', () => {
+          const wasMobile = this.isMobile;
+          this.isMobile = window.innerWidth <= 768;
+          
+          if (wasMobile !== this.isMobile) {
+            this.switchVideo();
+            this.setupControls();
+          }
+        });
+      }
+    }
+
+    customElements.define('video-player-{{ ai_gen_id }}', VideoPlayer{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Video block",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video files"
+    },
+    {
+      "type": "url",
+      "id": "video_desktop",
+      "label": "Desktop video URL"
+    },
+    {
+      "type": "url",
+      "id": "video_mobile",
+      "label": "Mobile video URL"
+    },
+    {
+      "type": "header",
+      "content": "Video settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Start muted",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show video controls",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show overlay",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "control_color",
+      "label": "Control background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "control_icon_color",
+      "label": "Control icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 600,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video block"
+    }
+  ]
+}
+{% endschema %}

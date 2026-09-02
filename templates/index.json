@@ -1,0 +1,348 @@
+{
+  "sections": {
+    "slideshow_XCrVhF": {
+      "type": "slideshow",
+      "blocks": {
+        "image_AF74Ly": {
+          "type": "image",
+          "settings": {
+            "top_subheading": "",
+            "title": "Crafted for Flavour. \nMade for You.",
+            "title_size": 53,
+            "subheading": "Premium food experiences, delivered across Pakistan.",
+            "link": "shopify://collections/all",
+            "link_text": "SHOP NOW",
+            "link_2": "",
+            "link_text_2": "",
+            "color_accent": "#6b2737",
+            "text_align": "vertical-bottom horizontal-left",
+            "image": "shopify://shop_images/Gemini_Generated_Image_za82f7za82f7za82.png",
+            "image_mobile": "shopify://shop_images/Gemini_Generated_Image_za82f7za82f7za82_1.png",
+            "parallax_direction": "left",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "image_AF74Ly"
+      ],
+      "name": "t:sections.slideshow.presets.hero_optional_slideshow.name",
+      "settings": {
+        "section_height": "750px",
+        "mobile_height": "auto",
+        "parallax": false,
+        "style": "bars",
+        "autoplay": true,
+        "autoplay_speed": 5
+      }
+    },
+    "rich_text_feLfqq": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_7MYYtn": {
+          "type": "heading",
+          "settings": {
+            "title": "Our Story",
+            "heading_size": "h2"
+          }
+        },
+        "text_FCDJV6": {
+          "type": "text",
+          "settings": {
+            "enlarge_text": true,
+            "text": "<p>FLAVE began in the simplest way making homemade food for friends and family. What started as a few small batches quickly became something people kept coming back for and sharing with others.<br/><br/>From the very beginning, we've believed that great food should be as beautiful as it is delicious. Carefully selected ingredients, thoughtful presentation, and handcrafted quality remain at the heart of everything we make.<br/><br/>Today, every batch of FLAVE granola is crafted with the same care as those first homemade recipes\u2014using quality ingredients, baked in small batches, and made to bring a little joy to everyday moments.<br/><br/>Welcome to FLAVE. We hope every bite is one you'll look forward to.</p>"
+          }
+        },
+        "button_VXU6rP": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "link_text": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_7MYYtn",
+        "text_FCDJV6",
+        "button_VXU6rP"
+      ],
+      "disabled": true,
+      "name": "t:sections.rich-text.presets.rich_text.name",
+      "settings": {
+        "align_text": "center",
+        "narrow_column": false,
+        "divider": false
+      }
+    },
+    "background_image_text_ixjEFj": {
+      "type": "background-image-text",
+      "name": "t:sections.background-image-text.presets.large_image_with_text_box.name",
+      "settings": {
+        "subtitle": "",
+        "title": "",
+        "heading_size": "h2",
+        "text": "",
+        "button_label": "",
+        "button_link": "",
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_30_2026_05_52_17_AM.png",
+        "layout": "left",
+        "height": 450,
+        "framed": false,
+        "parallax": false,
+        "parallax_direction": "top"
+      }
+    },
+    "featured_collection_main": {
+      "type": "featured-collection",
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "heading_size": "h2",
+        "home_featured_products": "shop-flave",
+        "per_row": 2,
+        "rows": 2,
+        "mobile_scrollable": true,
+        "view_all": true,
+        "divider": false
+      }
+    },
+    "testimonials_KryA9i": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_jdwgnr": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Jordan M.",
+            "author_info": "Toronto, ON"
+          }
+        },
+        "testimonial_3YQDQL": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Avery L.",
+            "author_info": "Los Angeles, CA"
+          }
+        },
+        "testimonial_REh9cf": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Casey R.",
+            "author_info": "Toronto, ON"
+          }
+        },
+        "testimonial_wf47h9": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Morgan T.",
+            "author_info": "Vancouver, BC"
+          }
+        },
+        "testimonial_gPpVMA": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Riley S.",
+            "author_info": "Austin, TX"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_jdwgnr",
+        "testimonial_3YQDQL",
+        "testimonial_REh9cf",
+        "testimonial_wf47h9",
+        "testimonial_gPpVMA"
+      ],
+      "name": "t:sections.testimonials.presets.testimonials.name",
+      "settings": {
+        "title": "Customer Reviews",
+        "heading_size": "h2",
+        "align_text": "center",
+        "round_images": true,
+        "color_background": "#faf6f0",
+        "color_text": "#2c2017"
+      }
+    },
+    "featured_product_6tBwjx": {
+      "type": "featured-product",
+      "blocks": {
+        "price_pcxJF6": {
+          "type": "price",
+          "settings": {}
+        },
+        "description_3mQCt8": {
+          "type": "description",
+          "settings": {
+            "is_tab": false
+          }
+        },
+        "variant_picker_3A9KRq": {
+          "type": "variant_picker",
+          "settings": {
+            "variant_labels": true,
+            "picker_type": "button",
+            "product_dynamic_variants_enable": true,
+            "color_swatches": false
+          }
+        },
+        "buy_buttons_r4zf4a": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "surface_pickup_enable": true,
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "price_pcxJF6",
+        "description_3mQCt8",
+        "variant_picker_3A9KRq",
+        "buy_buttons_r4zf4a"
+      ],
+      "name": "t:sections.featured-product.presets.featured_product.name",
+      "settings": {
+        "featured_product": "honey-crunch",
+        "divider": false,
+        "sku_enable": false,
+        "image_position": "left",
+        "image_size": "medium",
+        "product_zoom_enable": true,
+        "thumbnail_position": "beside",
+        "thumbnail_arrows": false,
+        "mobile_layout": "full",
+        "enable_video_looping": true,
+        "product_video_style": "muted"
+      }
+    },
+    "background_image_text_hTXE6m": {
+      "type": "background-image-text",
+      "disabled": true,
+      "name": "t:sections.background-image-text.presets.large_image_with_text_box.name",
+      "settings": {
+        "subtitle": "",
+        "title": "",
+        "heading_size": "h2",
+        "text": "",
+        "button_label": "",
+        "button_link": "",
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_30_2026_06_13_12_AM_1.png",
+        "layout": "left",
+        "height": 650,
+        "framed": false,
+        "parallax": false,
+        "parallax_direction": "left"
+      }
+    },
+    "slideshow_fzfLBC": {
+      "type": "slideshow",
+      "blocks": {
+        "image_cXNE8a": {
+          "type": "image",
+          "settings": {
+            "top_subheading": "",
+            "title": "",
+            "title_size": 80,
+            "subheading": "",
+            "link": "",
+            "link_text": "",
+            "link_2": "",
+            "link_text_2": "",
+            "color_accent": "rgba(0,0,0,0)",
+            "text_align": "vertical-center horizontal-center",
+            "image": "shopify://shop_images/Gemini_Generated_Image_za82f7za82f7za82.png",
+            "image_mobile": "shopify://shop_images/Gemini_Generated_Image_za82f7za82f7za82_1.png",
+            "parallax_direction": "top",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "image_cXNE8a"
+      ],
+      "disabled": true,
+      "name": "t:sections.slideshow.presets.hero_optional_slideshow.name",
+      "settings": {
+        "section_height": "750px",
+        "mobile_height": "auto",
+        "parallax": false,
+        "style": "bars",
+        "autoplay": true,
+        "autoplay_speed": 5
+      }
+    },
+    "featured_product_UipXLR": {
+      "type": "featured-product",
+      "blocks": {
+        "price_wFxXhp": {
+          "type": "price",
+          "settings": {}
+        },
+        "description_mKjNGP": {
+          "type": "description",
+          "settings": {
+            "is_tab": false
+          }
+        },
+        "variant_picker_DcYjh6": {
+          "type": "variant_picker",
+          "settings": {
+            "variant_labels": true,
+            "picker_type": "button",
+            "product_dynamic_variants_enable": true,
+            "color_swatches": false
+          }
+        },
+        "buy_buttons_qMyT6J": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "surface_pickup_enable": true,
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "price_wFxXhp",
+        "description_mKjNGP",
+        "variant_picker_DcYjh6",
+        "buy_buttons_qMyT6J"
+      ],
+      "name": "t:sections.featured-product.presets.featured_product.name",
+      "settings": {
+        "featured_product": "cranberry",
+        "divider": true,
+        "sku_enable": false,
+        "image_position": "right",
+        "image_size": "medium",
+        "product_zoom_enable": false,
+        "thumbnail_position": "beside",
+        "thumbnail_arrows": false,
+        "mobile_layout": "partial",
+        "enable_video_looping": false,
+        "product_video_style": "muted"
+      }
+    }
+  },
+  "order": [
+    "slideshow_XCrVhF",
+    "rich_text_feLfqq",
+    "background_image_text_ixjEFj",
+    "featured_collection_main",
+    "testimonials_KryA9i",
+    "featured_product_6tBwjx",
+    "background_image_text_hTXE6m",
+    "slideshow_fzfLBC",
+    "featured_product_UipXLR"
+  ]
+}

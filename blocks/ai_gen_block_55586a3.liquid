@@ -1,0 +1,197 @@
+{% doc %}
+  @prompt
+    Add a smart scroll header animation to the FLAVE website. When the user scrolls down, the sticky header should smoothly slide upward and hide (translate Y -100%). When the user scrolls back up, the header should smoothly slide back into view. The transition should be smooth at approximately 300ms ease. The header should retain its warm cream background (#FAF6F0) when it reappears. Add a very subtle bottom box-shadow when the header reappears while scrolling (e.g. 0 2px 12px rgba(0,0,0,0.06)). No layout shifting or content jumping. Works on both desktop and mobile.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-smart-header-{{ ai_gen_id }} {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: {{ block.settings.header_background }};
+    transition: transform {{ block.settings.transition_speed }}ms ease, box-shadow {{ block.settings.transition_speed }}ms ease;
+    transform: translateY(0);
+  }
+
+  .ai-smart-header-{{ ai_gen_id }}.ai-smart-header--hidden {
+    transform: translateY(-100%);
+  }
+
+  .ai-smart-header-{{ ai_gen_id }}.ai-smart-header--scrolled {
+    box-shadow: {{ block.settings.shadow_blur }}px {{ block.settings.shadow_color }};
+  }
+
+  .ai-smart-header-spacer-{{ ai_gen_id }} {
+    height: var(--ai-header-height-{{ ai_gen_id }});
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-smart-header-{{ ai_gen_id }} {
+      transition: transform {{ block.settings.mobile_transition_speed }}ms ease, box-shadow {{ block.settings.mobile_transition_speed }}ms ease;
+    }
+  }
+{% endstyle %}
+
+<smart-scroll-header-{{ ai_gen_id }} {{ block.shopify_attributes }}>
+  <div class="ai-smart-header-{{ ai_gen_id }}">
+    <div class="ai-smart-header-content-{{ ai_gen_id }}">
+      {{ block.settings.header_content }}
+    </div>
+  </div>
+  <div class="ai-smart-header-spacer-{{ ai_gen_id }}"></div>
+</smart-scroll-header-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class SmartScrollHeader{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.header = this.querySelector('.ai-smart-header-{{ ai_gen_id }}');
+        this.spacer = this.querySelector('.ai-smart-header-spacer-{{ ai_gen_id }}');
+        this.lastScrollY = 0;
+        this.scrollThreshold = {{ block.settings.scroll_threshold }};
+        this.isScrolling = false;
+      }
+
+      connectedCallback() {
+        this.setHeaderHeight();
+        this.setupScrollListener();
+        window.addEventListener('resize', this.setHeaderHeight.bind(this));
+      }
+
+      setHeaderHeight() {
+        const headerHeight = this.header.offsetHeight;
+        this.spacer.style.setProperty('--ai-header-height-{{ ai_gen_id }}', `${headerHeight}px`);
+      }
+
+      setupScrollListener() {
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              this.handleScroll();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+      }
+
+      handleScroll() {
+        const currentScrollY = window.scrollY;
+        const scrollDifference = currentScrollY - this.lastScrollY;
+
+        if (Math.abs(scrollDifference) < this.scrollThreshold) {
+          return;
+        }
+
+        if (scrollDifference > 0 && currentScrollY > this.header.offsetHeight) {
+          this.header.classList.add('ai-smart-header--hidden');
+          this.header.classList.remove('ai-smart-header--scrolled');
+        } else if (scrollDifference < 0) {
+          this.header.classList.remove('ai-smart-header--hidden');
+          if (currentScrollY > this.header.offsetHeight) {
+            this.header.classList.add('ai-smart-header--scrolled');
+          } else {
+            this.header.classList.remove('ai-smart-header--scrolled');
+          }
+        }
+
+        if (currentScrollY <= 0) {
+          this.header.classList.remove('ai-smart-header--scrolled');
+          this.header.classList.remove('ai-smart-header--hidden');
+        }
+
+        this.lastScrollY = currentScrollY;
+      }
+    }
+
+    customElements.define('smart-scroll-header-{{ ai_gen_id }}', SmartScrollHeader{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Smart scroll header",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header content"
+    },
+    {
+      "type": "html",
+      "id": "header_content",
+      "label": "Header HTML",
+      "default": "<div style='padding: 20px; text-align: center;'>Your Header Content</div>"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Background color",
+      "default": "#FAF6F0"
+    },
+    {
+      "type": "text",
+      "id": "shadow_blur",
+      "label": "Shadow blur",
+      "default": "0 2px 12px rgba(0,0,0,0.06)"
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Shadow color (legacy)",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "range",
+      "id": "transition_speed",
+      "label": "Transition speed",
+      "min": 100,
+      "max": 600,
+      "step": 50,
+      "unit": "ms",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "mobile_transition_speed",
+      "label": "Mobile transition speed",
+      "min": 100,
+      "max": 600,
+      "step": 50,
+      "unit": "ms",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "scroll_threshold",
+      "label": "Scroll sensitivity",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Smart scroll header"
+    }
+  ]
+}
+{% endschema %}

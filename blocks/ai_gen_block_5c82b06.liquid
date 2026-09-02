@@ -1,0 +1,345 @@
+{% doc %}
+  @prompt
+    Create a JazzCash Buy Now Pay Later (BNPL) installment display for the product page with the following requirements:
+    
+    1. **Front Display (inline on product page):**
+       - Show JazzCash BNPL logo image from: https://cdn.shopify.com/s/files/1/0097/2075/8332/files/Jazz_BNPL_logo.png?v=1776457596
+       - Below or next to logo show text: "3 easy monthly installments of Rs. X" where X = (product price * 1.15) / 3, formatted with comma separators, no decimals
+       - Logo should be clickable and open a popup modal
+       - Logo image should be small/compact (max height 40px) to fit inline with product info
+    
+    2. **Popup Modal (on logo click):**
+       - Show popup image: https://cdn.shopify.com/s/files/1/0097/2075/8332/files/popup_bnpl.webp?v=1776457596
+       - Full width image inside modal
+       - Close button (X) in top right corner
+       - Dark overlay background
+       - Smooth open/close animation
+    
+    3. **Technical:**
+       - Use Liquid to get current product price: product.selected_or_first_available_variant.price (price is in cents, divide by 100)
+       - Calculate: installment = (price_in_pkr * 1.15) / 3, round to nearest integer
+       - Display as: "Rs. 1,234/month x 3"
+       - Mobile responsive
+       - No external dependencies, pure CSS + vanilla JS
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% liquid
+  assign variant_price = product.selected_or_first_available_variant.price
+  assign price_in_pkr = variant_price | divided_by: 100.0
+  assign price_with_markup = price_in_pkr | times: 1.15
+  assign installment_amount = price_with_markup | divided_by: 3.0 | round
+%}
+
+{% style %}
+  .ai-jazzcash-bnpl-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    margin: 16px 0;
+  }
+
+  .ai-jazzcash-bnpl-container-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ai-jazzcash-bnpl-logo-wrapper-{{ ai_gen_id }} {
+    flex-shrink: 0;
+  }
+
+  .ai-jazzcash-bnpl-logo-{{ ai_gen_id }} {
+    max-height: {{ block.settings.logo_height }}px;
+    width: auto;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .ai-jazzcash-bnpl-logo-{{ ai_gen_id }}:hover {
+    opacity: 0.8;
+  }
+
+  .ai-jazzcash-bnpl-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.text_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.4;
+  }
+
+  .ai-jazzcash-bnpl-amount-{{ ai_gen_id }} {
+    font-weight: 600;
+    color: {{ block.settings.amount_color }};
+  }
+
+  .ai-jazzcash-bnpl-modal-overlay-{{ ai_gen_id }} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    padding: 20px;
+  }
+
+  .ai-jazzcash-bnpl-modal-overlay-{{ ai_gen_id }}.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ai-jazzcash-bnpl-modal-content-{{ ai_gen_id }} {
+    position: relative;
+    max-width: {{ block.settings.modal_max_width }}px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: {{ block.settings.modal_border_radius }}px;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .ai-jazzcash-bnpl-modal-overlay-{{ ai_gen_id }}.active .ai-jazzcash-bnpl-modal-content-{{ ai_gen_id }} {
+    transform: scale(1);
+  }
+
+  .ai-jazzcash-bnpl-modal-image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .ai-jazzcash-bnpl-modal-close-{{ ai_gen_id }} {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    z-index: 1;
+  }
+
+  .ai-jazzcash-bnpl-modal-close-{{ ai_gen_id }}:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .ai-jazzcash-bnpl-modal-close-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+    stroke: #ffffff;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-jazzcash-bnpl-container-{{ ai_gen_id }} {
+      gap: 8px;
+    }
+
+    .ai-jazzcash-bnpl-logo-{{ ai_gen_id }} {
+      max-height: {{ block.settings.logo_height | times: 0.8 }}px;
+    }
+
+    .ai-jazzcash-bnpl-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+
+    .ai-jazzcash-bnpl-modal-content-{{ ai_gen_id }} {
+      max-width: 100%;
+    }
+  }
+{% endstyle %}
+
+<jazzcash-bnpl-{{ ai_gen_id }} class="ai-jazzcash-bnpl-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-jazzcash-bnpl-container-{{ ai_gen_id }}">
+    <div class="ai-jazzcash-bnpl-logo-wrapper-{{ ai_gen_id }}">
+      <img
+        src="{{ block.settings.logo_image }}"
+        alt="JazzCash BNPL"
+        class="ai-jazzcash-bnpl-logo-{{ ai_gen_id }}"
+        loading="lazy"
+        width="120"
+        height="40"
+      >
+    </div>
+    <div class="ai-jazzcash-bnpl-text-{{ ai_gen_id }}">
+      {{ block.settings.installment_text }}
+      <span class="ai-jazzcash-bnpl-amount-{{ ai_gen_id }}">
+        Rs. {{ installment_amount | divided_by: 1 | round }}{{ block.settings.per_month_text }}
+      </span>
+    </div>
+  </div>
+
+  <div class="ai-jazzcash-bnpl-modal-overlay-{{ ai_gen_id }}">
+    <div class="ai-jazzcash-bnpl-modal-content-{{ ai_gen_id }}">
+      <button
+        class="ai-jazzcash-bnpl-modal-close-{{ ai_gen_id }}"
+        aria-label="Close modal"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img
+        src="{{ block.settings.popup_image }}"
+        alt="JazzCash BNPL Details"
+        class="ai-jazzcash-bnpl-modal-image-{{ ai_gen_id }}"
+        loading="lazy"
+      >
+    </div>
+  </div>
+</jazzcash-bnpl-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class JazzCashBNPL{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.logo = this.querySelector('.ai-jazzcash-bnpl-logo-{{ ai_gen_id }}');
+        this.modalOverlay = this.querySelector('.ai-jazzcash-bnpl-modal-overlay-{{ ai_gen_id }}');
+        this.closeButton = this.querySelector('.ai-jazzcash-bnpl-modal-close-{{ ai_gen_id }}');
+
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.logo.addEventListener('click', () => this.openModal());
+        this.closeButton.addEventListener('click', () => this.closeModal());
+        this.modalOverlay.addEventListener('click', (e) => {
+          if (e.target === this.modalOverlay) {
+            this.closeModal();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.modalOverlay.classList.contains('active')) {
+            this.closeModal();
+          }
+        });
+      }
+
+      openModal() {
+        this.modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      closeModal() {
+        this.modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    customElements.define('jazzcash-bnpl-{{ ai_gen_id }}', JazzCashBNPL{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "JazzCash BNPL",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo and text"
+    },
+    {
+      "type": "text",
+      "id": "logo_image",
+      "label": "Logo image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0097/2075/8332/files/Jazz_BNPL_logo.png?v=1776457596"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "text",
+      "id": "installment_text",
+      "label": "Installment text",
+      "default": "3 easy monthly installments of"
+    },
+    {
+      "type": "text",
+      "id": "per_month_text",
+      "label": "Per month text",
+      "default": "/month x 3"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "amount_color",
+      "label": "Amount color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Modal popup"
+    },
+    {
+      "type": "text",
+      "id": "popup_image",
+      "label": "Popup image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0097/2075/8332/files/popup_bnpl.webp?v=1776457596"
+    },
+    {
+      "type": "range",
+      "id": "modal_max_width",
+      "label": "Modal max width",
+      "min": 400,
+      "max": 900,
+      "step": 50,
+      "unit": "px",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "modal_border_radius",
+      "label": "Modal border radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "JazzCash BNPL"
+    }
+  ]
+}
+{% endschema %}

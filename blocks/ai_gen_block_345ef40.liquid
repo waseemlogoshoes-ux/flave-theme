@@ -1,0 +1,733 @@
+{% doc %}
+  @prompt
+    muj video ka block chyee jis me video upload ya link add karne option dextop ke lia alagor mobile ke lia laga ho
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-video-block-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
+  }
+
+  .ai-video-container-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-video-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: {{ block.settings.aspect_ratio }}%;
+    background-color: #f4f4f4;
+    border-radius: {{ block.settings.border_radius }}px;
+    overflow: hidden;
+  }
+
+  .ai-video-element-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-video-placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-video-placeholder-{{ ai_gen_id }} svg {
+    width: 80px;
+    height: 80px;
+    color: #999;
+  }
+
+  .ai-video-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-video-controls-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 2;
+  }
+
+  .ai-video-control-btn-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+  }
+
+  .ai-video-control-btn-{{ ai_gen_id }}:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .ai-video-control-btn-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ai-video-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ block.settings.overlay_color }};
+    opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+    border-radius: {{ block.settings.border_radius }}px;
+    pointer-events: none;
+  }
+
+  .ai-video-content-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: {{ block.settings.text_color }};
+    z-index: 3;
+    max-width: 80%;
+  }
+
+  .ai-video-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .ai-video-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .ai-video-mobile-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-video-desktop-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-video-mobile-{{ ai_gen_id }} {
+      display: block;
+    }
+
+    .ai-video-wrapper-{{ ai_gen_id }} {
+      padding-bottom: {{ block.settings.mobile_aspect_ratio }}%;
+    }
+
+    .ai-video-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+    }
+
+    .ai-video-description-{{ ai_gen_id }} {
+      font-size: {{ block.settings.description_size | times: 0.9 }}px;
+    }
+
+    .ai-video-container-{{ ai_gen_id }} {
+      padding: 0 15px;
+    }
+  }
+{% endstyle %}
+
+<responsive-video-{{ ai_gen_id }}
+  class="ai-video-block-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-video-container-{{ ai_gen_id }}">
+    <div class="ai-video-wrapper-{{ ai_gen_id }}">
+      {% comment %} Desktop Video {% endcomment %}
+      <div class="ai-video-desktop-{{ ai_gen_id }}">
+        {% if block.settings.desktop_video_type == 'upload' and block.settings.desktop_video_file %}
+          <video
+            class="ai-video-element-{{ ai_gen_id }}"
+            {% if block.settings.autoplay %}autoplay{% endif %}
+            {% if block.settings.loop %}loop{% endif %}
+            {% if block.settings.muted %}muted{% endif %}
+            {% unless block.settings.show_controls %}controls{% endunless %}
+            playsinline
+            preload="metadata"
+          >
+            <source src="{{ block.settings.desktop_video_file }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% elsif block.settings.desktop_video_type == 'url' and block.settings.desktop_video_url != blank %}
+          {% if block.settings.desktop_video_url contains 'youtube.com' or block.settings.desktop_video_url contains 'youtu.be' %}
+            {% assign video_id = block.settings.desktop_video_url | split: '/' | last | split: '?' | first | split: '&' | first %}
+            {% if block.settings.desktop_video_url contains 'watch?v=' %}
+              {% assign video_id = block.settings.desktop_video_url | split: 'watch?v=' | last | split: '&' | first %}
+            {% endif %}
+            <iframe
+              class="ai-video-element-{{ ai_gen_id }}"
+              src="https://www.youtube.com/embed/{{ video_id }}?autoplay={{ block.settings.autoplay | default: 0 }}&loop={{ block.settings.loop | default: 0 }}&mute={{ block.settings.muted | default: 0 }}&controls={{ block.settings.show_controls | default: 1 }}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          {% elsif block.settings.desktop_video_url contains 'vimeo.com' %}
+            {% assign video_id = block.settings.desktop_video_url | split: '/' | last %}
+            <iframe
+              class="ai-video-element-{{ ai_gen_id }}"
+              src="https://player.vimeo.com/video/{{ video_id }}?autoplay={{ block.settings.autoplay | default: 0 }}&loop={{ block.settings.loop | default: 0 }}&muted={{ block.settings.muted | default: 0 }}"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          {% else %}
+            <video
+              class="ai-video-element-{{ ai_gen_id }}"
+              {% if block.settings.autoplay %}autoplay{% endif %}
+              {% if block.settings.loop %}loop{% endif %}
+              {% if block.settings.muted %}muted{% endif %}
+              {% unless block.settings.show_controls %}controls{% endunless %}
+              playsinline
+              preload="metadata"
+            >
+              <source src="{{ block.settings.desktop_video_url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          {% endif %}
+        {% else %}
+          <div class="ai-video-placeholder-{{ ai_gen_id }}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5,3 19,12 5,21"></polygon>
+            </svg>
+            <div class="ai-video-empty-state-{{ ai_gen_id }}">
+              Add desktop video
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      {% comment %} Mobile Video {% endcomment %}
+      <div class="ai-video-mobile-{{ ai_gen_id }}">
+        {% if block.settings.mobile_video_type == 'upload' and block.settings.mobile_video_file %}
+          <video
+            class="ai-video-element-{{ ai_gen_id }}"
+            {% if block.settings.autoplay %}autoplay{% endif %}
+            {% if block.settings.loop %}loop{% endif %}
+            {% if block.settings.muted %}muted{% endif %}
+            {% unless block.settings.show_controls %}controls{% endunless %}
+            playsinline
+            preload="metadata"
+          >
+            <source src="{{ block.settings.mobile_video_file }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% elsif block.settings.mobile_video_type == 'url' and block.settings.mobile_video_url != blank %}
+          {% if block.settings.mobile_video_url contains 'youtube.com' or block.settings.mobile_video_url contains 'youtu.be' %}
+            {% assign video_id = block.settings.mobile_video_url | split: '/' | last | split: '?' | first | split: '&' | first %}
+            {% if block.settings.mobile_video_url contains 'watch?v=' %}
+              {% assign video_id = block.settings.mobile_video_url | split: 'watch?v=' | last | split: '&' | first %}
+            {% endif %}
+            <iframe
+              class="ai-video-element-{{ ai_gen_id }}"
+              src="https://www.youtube.com/embed/{{ video_id }}?autoplay={{ block.settings.autoplay | default: 0 }}&loop={{ block.settings.loop | default: 0 }}&mute={{ block.settings.muted | default: 0 }}&controls={{ block.settings.show_controls | default: 1 }}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          {% elsif block.settings.mobile_video_url contains 'vimeo.com' %}
+            {% assign video_id = block.settings.mobile_video_url | split: '/' | last %}
+            <iframe
+              class="ai-video-element-{{ ai_gen_id }}"
+              src="https://player.vimeo.com/video/{{ video_id }}?autoplay={{ block.settings.autoplay | default: 0 }}&loop={{ block.settings.loop | default: 0 }}&muted={{ block.settings.muted | default: 0 }}"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          {% else %}
+            <video
+              class="ai-video-element-{{ ai_gen_id }}"
+              {% if block.settings.autoplay %}autoplay{% endif %}
+              {% if block.settings.loop %}loop{% endif %}
+              {% if block.settings.muted %}muted{% endif %}
+              {% unless block.settings.show_controls %}controls{% endunless %}
+              playsinline
+              preload="metadata"
+            >
+              <source src="{{ block.settings.mobile_video_url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          {% endif %}
+        {% elsif block.settings.desktop_video_type == 'upload' and block.settings.desktop_video_file %}
+          <video
+            class="ai-video-element-{{ ai_gen_id }}"
+            {% if block.settings.autoplay %}autoplay{% endif %}
+            {% if block.settings.loop %}loop{% endif %}
+            {% if block.settings.muted %}muted{% endif %}
+            {% unless block.settings.show_controls %}controls{% endunless %}
+            playsinline
+            preload="metadata"
+          >
+            <source src="{{ block.settings.desktop_video_file }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% elsif block.settings.desktop_video_type == 'url' and block.settings.desktop_video_url != blank %}
+          {% if block.settings.desktop_video_url contains 'youtube.com' or block.settings.desktop_video_url contains 'youtu.be' %}
+            {% assign video_id = block.settings.desktop_video_url | split: '/' | last | split: '?' | first | split: '&' | first %}
+            {% if block.settings.desktop_video_url contains 'watch?v=' %}
+              {% assign video_id = block.settings.desktop_video_url | split: 'watch?v=' | last | split: '&' | first %}
+            {% endif %}
+            <iframe
+              class="ai-video-element-{{ ai_gen_id }}"
+              src="https://www.youtube.com/embed/{{ video_id }}?autoplay={{ block.settings.autoplay | default: 0 }}&loop={{ block.settings.loop | default: 0 }}&mute={{ block.settings.muted | default: 0 }}&controls={{ block.settings.show_controls | default: 1 }}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          {% elsif block.settings.desktop_video_url contains 'vimeo.com' %}
+            {% assign video_id = block.settings.desktop_video_url | split: '/' | last %}
+            <iframe
+              class="ai-video-element-{{ ai_gen_id }}"
+              src="https://player.vimeo.com/video/{{ video_id }}?autoplay={{ block.settings.autoplay | default: 0 }}&loop={{ block.settings.loop | default: 0 }}&muted={{ block.settings.muted | default: 0 }}"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          {% else %}
+            <video
+              class="ai-video-element-{{ ai_gen_id }}"
+              {% if block.settings.autoplay %}autoplay{% endif %}
+              {% if block.settings.loop %}loop{% endif %}
+              {% if block.settings.muted %}muted{% endif %}
+              {% unless block.settings.show_controls %}controls{% endunless %}
+              playsinline
+              preload="metadata"
+            >
+              <source src="{{ block.settings.desktop_video_url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          {% endif %}
+        {% else %}
+          <div class="ai-video-placeholder-{{ ai_gen_id }}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5,3 19,12 5,21"></polygon>
+            </svg>
+            <div class="ai-video-empty-state-{{ ai_gen_id }}">
+              Add mobile video
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if block.settings.show_overlay %}
+        <div class="ai-video-overlay-{{ ai_gen_id }}"></div>
+      {% endif %}
+
+      {% if block.settings.title != blank or block.settings.description != blank %}
+        <div class="ai-video-content-{{ ai_gen_id }}">
+          {% if block.settings.title != blank %}
+            <h2 class="ai-video-title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+          {% endif %}
+          {% if block.settings.description != blank %}
+            <p class="ai-video-description-{{ ai_gen_id }}">{{ block.settings.description }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if block.settings.show_controls %}
+        <div class="ai-video-controls-{{ ai_gen_id }}">
+          <button class="ai-video-control-btn-{{ ai_gen_id }}" data-action="play-pause" aria-label="Play/Pause">
+            <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5,3 19,12 5,21"></polygon>
+            </svg>
+            <svg class="pause-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          </button>
+          <button class="ai-video-control-btn-{{ ai_gen_id }}" data-action="mute" aria-label="Mute/Unmute">
+            <svg class="volume-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg class="mute-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</responsive-video-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ResponsiveVideo{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.video = this.querySelector('video');
+        this.playPauseBtn = this.querySelector('[data-action="play-pause"]');
+        this.muteBtn = this.querySelector('[data-action="mute"]');
+        
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        if (this.playPauseBtn && this.video) {
+          this.playPauseBtn.addEventListener('click', () => {
+            this.togglePlayPause();
+          });
+        }
+
+        if (this.muteBtn && this.video) {
+          this.muteBtn.addEventListener('click', () => {
+            this.toggleMute();
+          });
+        }
+
+        if (this.video) {
+          this.video.addEventListener('play', () => {
+            this.updatePlayPauseIcon(true);
+          });
+
+          this.video.addEventListener('pause', () => {
+            this.updatePlayPauseIcon(false);
+          });
+
+          this.video.addEventListener('volumechange', () => {
+            this.updateMuteIcon();
+          });
+        }
+      }
+
+      togglePlayPause() {
+        if (this.video.paused) {
+          this.video.play();
+        } else {
+          this.video.pause();
+        }
+      }
+
+      toggleMute() {
+        this.video.muted = !this.video.muted;
+      }
+
+      updatePlayPauseIcon(isPlaying) {
+        if (!this.playPauseBtn) return;
+        
+        const playIcon = this.playPauseBtn.querySelector('.play-icon');
+        const pauseIcon = this.playPauseBtn.querySelector('.pause-icon');
+        
+        if (isPlaying) {
+          playIcon.style.display = 'none';
+          pauseIcon.style.display = 'block';
+        } else {
+          playIcon.style.display = 'block';
+          pauseIcon.style.display = 'none';
+        }
+      }
+
+      updateMuteIcon() {
+        if (!this.muteBtn) return;
+        
+        const volumeIcon = this.muteBtn.querySelector('.volume-icon');
+        const muteIcon = this.muteBtn.querySelector('.mute-icon');
+        
+        if (this.video.muted) {
+          volumeIcon.style.display = 'none';
+          muteIcon.style.display = 'block';
+        } else {
+          volumeIcon.style.display = 'block';
+          muteIcon.style.display = 'none';
+        }
+      }
+    }
+
+    customElements.define('responsive-video-{{ ai_gen_id }}', ResponsiveVideo{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Responsive video",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Desktop video"
+    },
+    {
+      "type": "select",
+      "id": "desktop_video_type",
+      "label": "Desktop video type",
+      "options": [
+        {
+          "value": "upload",
+          "label": "Upload video"
+        },
+        {
+          "value": "url",
+          "label": "Video URL"
+        }
+      ],
+      "default": "upload"
+    },
+    {
+      "type": "url",
+      "id": "desktop_video_file",
+      "label": "Desktop video file"
+    },
+    {
+      "type": "url",
+      "id": "desktop_video_url",
+      "label": "Desktop video URL"
+    },
+    {
+      "type": "header",
+      "content": "Mobile video"
+    },
+    {
+      "type": "select",
+      "id": "mobile_video_type",
+      "label": "Mobile video type",
+      "options": [
+        {
+          "value": "upload",
+          "label": "Upload video"
+        },
+        {
+          "value": "url",
+          "label": "Video URL"
+        },
+        {
+          "value": "same",
+          "label": "Use desktop video"
+        }
+      ],
+      "default": "same"
+    },
+    {
+      "type": "url",
+      "id": "mobile_video_file",
+      "label": "Mobile video file"
+    },
+    {
+      "type": "url",
+      "id": "mobile_video_url",
+      "label": "Mobile video URL"
+    },
+    {
+      "type": "header",
+      "content": "Video settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Mute video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show custom controls",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 800
+    },
+    {
+      "type": "range",
+      "id": "aspect_ratio",
+      "min": 30,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop aspect ratio",
+      "default": 55
+    },
+    {
+      "type": "range",
+      "id": "mobile_aspect_ratio",
+      "min": 50,
+      "max": 120,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile aspect ratio",
+      "default": 75
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show overlay",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Text content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Responsive video"
+    }
+  ]
+}
+{% endschema %}

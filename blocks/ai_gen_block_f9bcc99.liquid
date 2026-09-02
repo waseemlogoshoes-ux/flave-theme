@@ -1,0 +1,1079 @@
+{% doc %}
+  @prompt
+    i need job anouncement page with sumit form with whatapapp submit , need 3 to 5 job posting option, i need also email submit option, email me submit hr ke mail par ho, need atechment option, Job description me muj text size and bulit option b chyee
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-job-announcements-{{ ai_gen_id }} {
+    padding: 40px 20px;
+    background-color: {{ block.settings.background_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-job-announcements__header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .ai-job-announcements__title-{{ ai_gen_id }} {
+    color: {{ block.settings.title_color }};
+    font-size: {{ block.settings.title_size }}px;
+    margin: 0 0 16px;
+  }
+
+  .ai-job-announcements__subtitle-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    margin: 0;
+  }
+
+  .ai-job-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .ai-job-card-{{ ai_gen_id }} {
+    background: {{ block.settings.card_background }};
+    border: 1px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ai-job-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-job-card__title-{{ ai_gen_id }} {
+    color: {{ block.settings.job_title_color }};
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+
+  .ai-job-card__department-{{ ai_gen_id }} {
+    color: {{ block.settings.department_color }};
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-job-card__location-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ai-job-card__description-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.job_description_size }}px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .ai-job-card__description-{{ ai_gen_id }} ul,
+  .ai-job-card__description-{{ ai_gen_id }} ol {
+    margin: 8px 0;
+    padding-left: 20px;
+  }
+
+  .ai-job-card__description-{{ ai_gen_id }} li {
+    margin-bottom: 4px;
+  }
+
+  .ai-job-card__description-{{ ai_gen_id }} strong {
+    font-weight: 600;
+  }
+
+  .ai-job-card__description-{{ ai_gen_id }} em {
+    font-style: italic;
+  }
+
+  .ai-job-card__description-{{ ai_gen_id }} p {
+    margin-bottom: 8px;
+  }
+
+  .ai-job-card__description-{{ ai_gen_id }} h3,
+  .ai-job-card__description-{{ ai_gen_id }} h4 {
+    font-weight: 600;
+    margin: 12px 0 6px;
+  }
+
+  .ai-job-card__apply-btn-{{ ai_gen_id }} {
+    background-color: {{ block.settings.apply_button_color }};
+    color: {{ block.settings.apply_button_text_color }};
+    border: none;
+    padding: 10px 20px;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    width: 100%;
+  }
+
+  .ai-job-card__apply-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.apply_button_hover_color }};
+  }
+
+  .ai-application-modal-{{ ai_gen_id }} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .ai-application-modal-{{ ai_gen_id }}.active {
+    display: flex;
+  }
+
+  .ai-application-form-{{ ai_gen_id }} {
+    background: {{ block.settings.form_background }};
+    border-radius: {{ block.settings.form_border_radius }}px;
+    padding: 32px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .ai-application-form__header-{{ ai_gen_id }} {
+    margin-bottom: 24px;
+  }
+
+  .ai-application-form__title-{{ ai_gen_id }} {
+    color: {{ block.settings.form_title_color }};
+    font-size: 24px;
+    margin: 0 0 8px;
+  }
+
+  .ai-application-form__job-title-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  .ai-application-form__close-{{ ai_gen_id }} {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: {{ block.settings.text_color }};
+    padding: 4px;
+  }
+
+  .ai-form-group-{{ ai_gen_id }} {
+    margin-bottom: 20px;
+  }
+
+  .ai-form-label-{{ ai_gen_id }} {
+    display: block;
+    color: {{ block.settings.form_label_color }};
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .ai-form-input-{{ ai_gen_id }},
+  .ai-form-textarea-{{ ai_gen_id }},
+  .ai-form-select-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .ai-form-textarea-{{ ai_gen_id }} {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .ai-form-file-{{ ai_gen_id }} {
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+
+  .ai-form-file-{{ ai_gen_id }}:hover {
+    border-color: {{ block.settings.apply_button_color }};
+  }
+
+  .ai-form-file-input-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  .ai-form-file-text-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+  }
+
+  .ai-form-buttons-{{ ai_gen_id }} {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .ai-form-submit-email-{{ ai_gen_id }},
+  .ai-form-submit-whatsapp-{{ ai_gen_id }} {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .ai-form-submit-email-{{ ai_gen_id }} {
+    background-color: {{ block.settings.email_button_color }};
+    color: {{ block.settings.email_button_text_color }};
+  }
+
+  .ai-form-submit-email-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.email_button_hover_color }};
+  }
+
+  .ai-form-submit-whatsapp-{{ ai_gen_id }} {
+    background-color: {{ block.settings.whatsapp_button_color }};
+    color: {{ block.settings.whatsapp_button_text_color }};
+  }
+
+  .ai-form-submit-whatsapp-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.whatsapp_button_hover_color }};
+  }
+
+  .ai-form-success-{{ ai_gen_id }} {
+    background-color: {{ block.settings.success_color }};
+    color: white;
+    padding: 12px;
+    border-radius: {{ block.settings.input_border_radius }}px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .ai-form-error-{{ ai_gen_id }} {
+    background-color: {{ block.settings.error_color }};
+    color: white;
+    padding: 12px;
+    border-radius: {{ block.settings.input_border_radius }}px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .ai-job-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-application-form-{{ ai_gen_id }} {
+      margin: 20px;
+      padding: 24px;
+    }
+
+    .ai-form-buttons-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+  }
+{% endstyle %}
+
+<job-announcements-{{ ai_gen_id }} class="ai-job-announcements-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-job-announcements__header-{{ ai_gen_id }}">
+    {% if block.settings.page_title != blank %}
+      <h1 class="ai-job-announcements__title-{{ ai_gen_id }}">{{ block.settings.page_title }}</h1>
+    {% endif %}
+    {% if block.settings.page_subtitle != blank %}
+      <p class="ai-job-announcements__subtitle-{{ ai_gen_id }}">{{ block.settings.page_subtitle }}</p>
+    {% endif %}
+  </div>
+
+  <div class="ai-job-grid-{{ ai_gen_id }}">
+    {% for i in (1..5) %}
+      {% liquid
+        assign job_enabled_key = 'job_' | append: i | append: '_enabled'
+        assign job_title_key = 'job_' | append: i | append: '_title'
+        assign job_department_key = 'job_' | append: i | append: '_department'
+        assign job_location_key = 'job_' | append: i | append: '_location'
+        assign job_description_key = 'job_' | append: i | append: '_description'
+
+        assign job_enabled = block.settings[job_enabled_key]
+        assign job_title = block.settings[job_title_key]
+        assign job_department = block.settings[job_department_key]
+        assign job_location = block.settings[job_location_key]
+        assign job_description = block.settings[job_description_key]
+      %}
+
+      {% if job_enabled and job_title != blank %}
+        <div class="ai-job-card-{{ ai_gen_id }}">
+          <h3 class="ai-job-card__title-{{ ai_gen_id }}">{{ job_title }}</h3>
+          {% if job_department != blank %}
+            <div class="ai-job-card__department-{{ ai_gen_id }}">{{ job_department }}</div>
+          {% endif %}
+          {% if job_location != blank %}
+            <div class="ai-job-card__location-{{ ai_gen_id }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              {{ job_location }}
+            </div>
+          {% endif %}
+          {% if job_description != blank %}
+            <div class="ai-job-card__description-{{ ai_gen_id }}">{{ job_description }}</div>
+          {% endif %}
+          <button 
+            class="ai-job-card__apply-btn-{{ ai_gen_id }}"
+            data-job-title="{{ job_title }}"
+            data-job-id="{{ i }}"
+          >
+            Apply Now
+          </button>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="ai-application-modal-{{ ai_gen_id }}" id="ai-application-modal-{{ ai_gen_id }}">
+    <div class="ai-application-form-{{ ai_gen_id }}">
+      <button class="ai-application-form__close-{{ ai_gen_id }}" type="button">&times;</button>
+      
+      <div class="ai-application-form__header-{{ ai_gen_id }}">
+        <h2 class="ai-application-form__title-{{ ai_gen_id }}">Apply for Position</h2>
+        <p class="ai-application-form__job-title-{{ ai_gen_id }}" id="ai-modal-job-title-{{ ai_gen_id }}"></p>
+      </div>
+
+      <div class="ai-form-success-{{ ai_gen_id }}" id="ai-form-success-{{ ai_gen_id }}">
+        Application submitted successfully!
+      </div>
+
+      <div class="ai-form-error-{{ ai_gen_id }}" id="ai-form-error-{{ ai_gen_id }}">
+        Please fill in all required fields.
+      </div>
+
+      <form id="ai-application-form-{{ ai_gen_id }}">
+        <div class="ai-form-group-{{ ai_gen_id }}">
+          <label class="ai-form-label-{{ ai_gen_id }}" for="ai-applicant-name-{{ ai_gen_id }}">Full Name *</label>
+          <input 
+            type="text" 
+            id="ai-applicant-name-{{ ai_gen_id }}" 
+            class="ai-form-input-{{ ai_gen_id }}" 
+            required>
+        </div>
+
+        <div class="ai-form-group-{{ ai_gen_id }}">
+          <label class="ai-form-label-{{ ai_gen_id }}" for="ai-applicant-email-{{ ai_gen_id }}">Email Address *</label>
+          <input 
+            type="email" 
+            id="ai-applicant-email-{{ ai_gen_id }}" 
+            class="ai-form-input-{{ ai_gen_id }}" 
+            required
+          >
+        </div>
+
+        <div class="ai-form-group-{{ ai_gen_id }}">
+          <label class="ai-form-label-{{ ai_gen_id }}" for="ai-applicant-phone-{{ ai_gen_id }}">Phone Number *</label>
+          <input 
+            type="tel" 
+            id="ai-applicant-phone-{{ ai_gen_id }}" 
+            class="ai-form-input-{{ ai_gen_id }}" 
+            required
+          >
+        </div>
+
+        <div class="ai-form-group-{{ ai_gen_id }}">
+          <label class="ai-form-label-{{ ai_gen_id }}" for="ai-applicant-experience-{{ ai_gen_id }}">Years of Experience</label>
+          <select id="ai-applicant-experience-{{ ai_gen_id }}" class="ai-form-select-{{ ai_gen_id }}">
+            <option value="">Select experience</option>
+            <option value="0-1">0-1 years</option>
+            <option value="1-3">1-3 years</option>
+            <option value="3-5">3-5 years</option>
+            <option value="5-10">5-10 years</option>
+            <option value="10+">10+ years</option>
+          </select>
+        </div>
+
+        <div class="ai-form-group-{{ ai_gen_id }}">
+          <label class="ai-form-label-{{ ai_gen_id }}" for="ai-applicant-cover-letter-{{ ai_gen_id }}">Cover Letter</label>
+          <textarea 
+            id="ai-applicant-cover-letter-{{ ai_gen_id }}" 
+            class="ai-form-textarea-{{ ai_gen_id }}" 
+            placeholder="Tell us why you're interested in this position..."></textarea>
+        </div>
+
+        <div class="ai-form-group-{{ ai_gen_id }}">
+          <label class="ai-form-label-{{ ai_gen_id }}">Resume/CV</label>
+          <div class="ai-form-file-{{ ai_gen_id }}" onclick="document.getElementById('ai-resume-upload-{{ ai_gen_id }}').click()">
+            <input 
+              type="file" 
+              id="ai-resume-upload-{{ ai_gen_id }}" 
+              class="ai-form-file-input-{{ ai_gen_id }}" 
+              accept=".pdf,.doc,.docx"
+            >
+            <div class="ai-form-file-text-{{ ai_gen_id }}" id="ai-file-text-{{ ai_gen_id }}">
+              Click to upload resume (PDF, DOC, DOCX)
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-form-buttons-{{ ai_gen_id }}">
+          <button type="button" class="ai-form-submit-email-{{ ai_gen_id }}" id="ai-submit-email-{{ ai_gen_id }}">
+            Submit via Email
+          </button>
+          <button type="button" class="ai-form-submit-whatsapp-{{ ai_gen_id }}" id="ai-submit-whatsapp-{{ ai_gen_id }}">
+            Submit via WhatsApp
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</job-announcements-{{ ai_gen_id }}>
+
+<script>
+(function() {
+  class JobAnnouncements{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.modal = this.querySelector('#ai-application-modal-{{ ai_gen_id }}');
+      this.form = this.querySelector('#ai-application-form-{{ ai_gen_id }}');
+      this.currentJobTitle = '';
+    }
+
+    connectedCallback() {
+      this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+      const applyButtons = this.querySelectorAll('.ai-job-card__apply-btn-{{ ai_gen_id }}');
+      const closeButton = this.querySelector('.ai-application-form__close-{{ ai_gen_id }}');
+      const emailSubmit = this.querySelector('#ai-submit-email-{{ ai_gen_id }}');
+      const whatsappSubmit = this.querySelector('#ai-submit-whatsapp-{{ ai_gen_id }}');
+      const fileInput = this.querySelector('#ai-resume-upload-{{ ai_gen_id }}');
+
+      applyButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          this.currentJobTitle = e.target.dataset.jobTitle;
+          this.openModal();
+        });
+      });
+
+      closeButton.addEventListener('click', () => {
+        this.closeModal();
+      });
+
+      this.modal.addEventListener('click', (e) => {
+        if (e.target === this.modal) {
+          this.closeModal();
+        }
+      });
+
+      emailSubmit.addEventListener('click', () => {
+        this.submitViaEmail();
+      });
+
+      whatsappSubmit.addEventListener('click', () => {
+        this.submitViaWhatsApp();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const fileText = this.querySelector('#ai-file-text-{{ ai_gen_id }}');
+        if (e.target.files.length > 0) {
+          fileText.textContent = `Selected: ${e.target.files[0].name}`;
+        } else {
+          fileText.textContent = 'Click to upload resume (PDF, DOC, DOCX)';
+        }
+      });
+    }
+
+    openModal() {
+      const modalJobTitle = this.querySelector('#ai-modal-job-title-{{ ai_gen_id }}');
+      modalJobTitle.textContent = this.currentJobTitle;
+      this.modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    closeModal() {
+      this.modal.classList.remove('active');
+      document.body.style.overflow = '';
+      this.form.reset();
+      this.querySelector('#ai-file-text-{{ ai_gen_id }}').textContent = 'Click to upload resume (PDF, DOC, DOCX)';
+      this.hideMessages();
+    }
+
+    validateForm() {
+      const name = this.querySelector('#ai-applicant-name-{{ ai_gen_id }}').value.trim();
+      const email = this.querySelector('#ai-applicant-email-{{ ai_gen_id }}').value.trim();
+      const phone = this.querySelector('#ai-applicant-phone-{{ ai_gen_id }}').value.trim();
+
+      return name && email && phone;
+    }
+
+    getFormData() {
+      const name = this.querySelector('#ai-applicant-name-{{ ai_gen_id }}').value.trim();
+      const email = this.querySelector('#ai-applicant-email-{{ ai_gen_id }}').value.trim();
+      const phone = this.querySelector('#ai-applicant-phone-{{ ai_gen_id }}').value.trim();
+      const experience = this.querySelector('#ai-applicant-experience-{{ ai_gen_id }}').value;
+      const coverLetter = this.querySelector('#ai-applicant-cover-letter-{{ ai_gen_id }}').value.trim();
+
+      return {
+        name,
+        email,
+        phone,
+        experience,
+        coverLetter,
+        jobTitle: this.currentJobTitle
+      };
+    }
+
+    submitViaEmail() {
+      if (!this.validateForm()) {
+        this.showError();
+        return;
+      }
+
+      const data = this.getFormData();
+      const hrEmail = '{{ block.settings.hr_email }}';
+      
+      const subject = `Job Application: ${data.jobTitle}`;
+      const body = `
+Dear HR Team,
+
+I am writing to apply for the position of ${data.jobTitle}.
+
+Applicant Details:
+- Name: ${data.name}
+- Email: ${data.email}
+- Phone: ${data.phone}
+- Experience: ${data.experience || 'Not specified'}
+
+${data.coverLetter ? `Cover Letter:\n${data.coverLetter}` : ''}
+
+Best regards,
+${data.name}
+      `.trim();
+
+      const mailtoLink = `mailto:${hrEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoLink;
+      this.showSuccess();
+      setTimeout(() => {
+        this.closeModal();
+      }, 2000);
+    }
+
+    submitViaWhatsApp() {
+      if (!this.validateForm()) {
+        this.showError();
+        return;
+      }
+
+      const data = this.getFormData();
+      const whatsappNumber = '{{ block.settings.whatsapp_number }}';
+      
+      const message = `
+*Job Application: ${data.jobTitle}*
+
+*Applicant Details:*
+• Name: ${data.name}
+• Email: ${data.email}
+• Phone: ${data.phone}
+• Experience: ${data.experience || 'Not specified'}
+
+${data.coverLetter ? `*Cover Letter:*\n${data.coverLetter}` : ''}`.trim();
+
+      const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappLink, '_blank');
+      
+      this.showSuccess();
+      setTimeout(() => {
+        this.closeModal();
+      }, 2000);
+    }
+
+    showSuccess() {
+      this.hideMessages();
+      this.querySelector('#ai-form-success-{{ ai_gen_id }}').style.display = 'block';
+    }
+
+    showError() {
+      this.hideMessages();
+      this.querySelector('#ai-form-error-{{ ai_gen_id }}').style.display = 'block';
+    }
+
+    hideMessages() {
+      this.querySelector('#ai-form-success-{{ ai_gen_id }}').style.display = 'none';
+      this.querySelector('#ai-form-error-{{ ai_gen_id }}').style.display = 'none';
+    }
+  }
+
+  customElements.define('job-announcements-{{ ai_gen_id }}', JobAnnouncements{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Job announcements",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Page content"
+    },
+    {
+      "type": "text",
+      "id": "page_title",
+      "label": "Page title",
+      "default": "Join Our Team"
+    },
+    {
+      "type": "textarea",
+      "id": "page_subtitle",
+      "label": "Page subtitle",
+      "default": "We're looking for talented individuals to join our growing team"
+    },
+    {
+      "type": "header",
+      "content": "Contact information"
+    },
+    {
+      "type": "text",
+      "id": "hr_email",
+      "label": "HR email address",
+      "default": "hr@company.com"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp number",
+      "default": "1234567890"
+    },
+    {
+      "type": "header",
+      "content": "Job position 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_1_enabled",
+      "label": "Enable job position 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "job_1_title",
+      "label": "Job title",
+      "default": "Frontend Developer"
+    },
+    {
+      "type": "text",
+      "id": "job_1_department",
+      "label": "Department",
+      "default": "Engineering"
+    },
+    {
+      "type": "text",
+      "id": "job_1_location",
+      "label": "Location",
+      "default": "Remote"
+    },
+    {
+      "type": "richtext",
+      "id": "job_1_description",
+      "label": "Job description",
+      "default": "<p>We are looking for a skilled Frontend Developer to join our team and help build amazing user experiences.</p><p><strong>Requirements:</strong></p><ul><li>3+ years of experience with React</li><li>Strong knowledge of JavaScript and CSS</li><li>Experience with modern build tools</li></ul>"
+    },
+    {
+      "type": "header",
+      "content": "Job position 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_2_enabled",
+      "label": "Enable job position 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "job_2_title",
+      "label": "Job title",
+      "default": "Marketing Manager"
+    },
+    {
+      "type": "text",
+      "id": "job_2_department",
+      "label": "Department",
+      "default": "Marketing"
+    },
+    {
+      "type": "text",
+      "id": "job_2_location",
+      "label": "Location",
+      "default": "New York"
+    },
+    {
+      "type": "richtext",
+      "id": "job_2_description",
+      "label": "Job description",
+      "default": "<p>Join our marketing team to drive growth and build brand awareness across multiple channels.</p><p><strong>Responsibilities:</strong></p><ul><li>Develop marketing strategies</li><li>Manage social media campaigns</li><li>Analyze market trends</li></ul>"
+    },
+    {
+      "type": "header",
+      "content": "Job position 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_3_enabled",
+      "label": "Enable job position 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "job_3_title",
+      "label": "Job title",
+      "default": "Product Designer"
+    },
+    {
+      "type": "text",
+      "id": "job_3_department",
+      "label": "Department",
+      "default": "Design"
+    },
+    {
+      "type": "text",
+      "id": "job_3_location",
+      "label": "Location",
+      "default": "San Francisco"
+    },
+    {
+      "type": "richtext",
+      "id": "job_3_description",
+      "label": "Job description",
+      "default": "<p>Create beautiful and intuitive product experiences that delight our users.</p><p><strong>Skills needed:</strong></p><ul><li>Proficiency in Figma and Sketch</li><li>Understanding of UX principles</li><li>Portfolio of design work</li></ul>"
+    },
+    {
+      "type": "header",
+      "content": "Job position 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_4_enabled",
+      "label": "Enable job position 4",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "job_4_title",
+      "label": "Job title",
+      "default": "Sales Representative"
+    },
+    {
+      "type": "text",
+      "id": "job_4_department",
+      "label": "Department",
+      "default": "Sales"
+    },
+    {
+      "type": "text",
+      "id": "job_4_location",
+      "label": "Location",
+      "default": "Chicago"
+    },
+    {
+      "type": "richtext",
+      "id": "job_4_description",
+      "label": "Job description",
+      "default": "<p>Drive revenue growth by building relationships with new and existing clients.</p><p><strong>What you'll do:</strong></p><ul><li>Generate new leads</li><li>Manage client relationships</li><li>Meet sales targets</li></ul>"
+    },
+    {
+      "type": "header",
+      "content": "Job position 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_5_enabled",
+      "label": "Enable job position 5",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "job_5_title",
+      "label": "Job title",
+      "default": "Customer Success Manager"
+    },
+    {
+      "type": "text",
+      "id": "job_5_department",
+      "label": "Department",
+      "default": "Customer Success"
+    },
+    {
+      "type": "text",
+      "id": "job_5_location",
+      "label": "Location",
+      "default": "Austin"
+    },
+    {
+      "type": "richtext",
+      "id": "job_5_description",
+      "label": "Job description",
+      "default": "<p>Help our customers achieve success and maximize value from our products.</p><p><strong>Key responsibilities:</strong></p><ul><li>Onboard new customers</li><li>Provide ongoing support</li><li>Identify upsell opportunities</li></ul>"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "job_title_color",
+      "label": "Job title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "department_color",
+      "label": "Department color",
+      "default": "#007bff"
+    },
+    {
+      "type": "color",
+      "id": "apply_button_color",
+      "label": "Apply button color",
+      "default": "#007bff"
+    },
+    {
+      "type": "color",
+      "id": "apply_button_text_color",
+      "label": "Apply button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "apply_button_hover_color",
+      "label": "Apply button hover color",
+      "default": "#0056b3"
+    },
+    {
+      "type": "color",
+      "id": "form_background",
+      "label": "Form background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "form_title_color",
+      "label": "Form title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "form_label_color",
+      "label": "Form label color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "email_button_color",
+      "label": "Email button color",
+      "default": "#28a745"
+    },
+    {
+      "type": "color",
+      "id": "email_button_text_color",
+      "label": "Email button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "email_button_hover_color",
+      "label": "Email button hover color",
+      "default": "#218838"
+    },
+    {
+      "type": "color",
+      "id": "whatsapp_button_color",
+      "label": "WhatsApp button color",
+      "default": "#25d366"
+    },
+    {
+      "type": "color",
+      "id": "whatsapp_button_text_color",
+      "label": "WhatsApp button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "whatsapp_button_hover_color",
+      "label": "WhatsApp button hover color",
+      "default": "#128c7e"
+    },
+    {
+      "type": "color",
+      "id": "success_color",
+      "label": "Success color",
+      "default": "#28a745"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Error color",
+      "default": "#dc3545"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Title size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "job_description_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Job description text size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Border radius"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Page border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "form_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Form border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Input border radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Job announcements"
+    }
+  ],
+  "tag": null
+}
+{% endschema %}

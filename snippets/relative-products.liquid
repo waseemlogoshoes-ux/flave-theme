@@ -1,0 +1,100 @@
+<style>
+  .mry-relative-products {
+    margin-bottom: 30px;
+}
+  .related-products-wrapper {
+    overflow-x: hidden;
+    margin-top: 10px 0 0;
+}
+h3 {
+  font-family: 'Marcolin-Headline';
+  font-size: 26px;
+}
+.related-products-dummy {
+    padding: 10 px;
+    clear: both;
+}
+  .related-product-list a {
+    flex-basis: auto;
+}
+.related-product-list {
+    /* width:1000px; */
+        width: 540px;
+    display: flex; /* Use flexbox for horizontal layout */
+   /* overflow-x: scroll;  Enable horizontal scrolling */
+    flex-wrap: wrap; /* Prevent items from wrapping to the next line */
+  }
+
+  .related-product {
+    margin-right: 10px; /* Adjust the margin between related products */
+  }
+.related-product-image {
+    width: 100px;
+}
+  .related-product-image img {
+    width: 100%;
+    height: auto;
+}
+.related-product-price {
+    color: $color-body-text;
+} 
+   .related-product-name-color {
+    color: #000;
+    text-align: center;
+    font-size: 14px;
+}
+@media (max-width:480px){
+   .related-product-list {
+    width: 100%!important;
+    gap: 13%;
+    }
+  .related-product-name-color {
+    font-size: 12px;
+}
+  .related-product-image {
+    width: 70px;
+}
+  .related-product {
+    margin-right: 0px;
+}
+}  
+</style>
+<!-- mry-relative-products-snippet render in main-product.liquid start -->
+<div class="mry-products-wrapper">
+  {%assign related_products = product.metafields.custom.related_products.value %}
+  {% if related_products != blank %}
+<legend class="form__label">Colors:</legend>
+  {% endif %}
+ <div class="related-products-wrapper">
+   {% if related_products %}
+     <div class = "related-product-list">
+      {% for related_product in related_products %}
+       <a href = "{{shop.url | append: "/products/" | append: related_product.handle }}">
+        <div class = "related-product">
+         <div class = "related-product-image">
+           <img src = "{{related_product.featured_media | img_url: 'medium' }}" />
+          </div>
+          {% assign colorTag = "" %}
+            {% for tag in related_product.tags %}
+              {% if tag contains "color_" %}
+                {% assign colorTag = tag | split: "_" | last %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+            <div class="related-product-name-color">
+              {{ colorTag }}
+            </div>
+        </div>
+       </a>
+      {% endfor %}
+     </div>
+   {%endif%}
+</div>
+<div class = "related-products-dummy"></div> 
+</div>
+
+<script>
+  console.log("Related Products:", {{ product.metafields.custom.related_products }});
+  console.log("mryColor", {{ product | json }})
+</script>
+<!-- mry-relative-products-snippet render in main-product.liquid end -->

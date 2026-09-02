@@ -1,0 +1,79 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "testimonials_9XAbmb": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_yMfdhQ": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Jordan M.",
+            "author_info": "Toronto, ON"
+          }
+        },
+        "testimonial_bERQqF": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Avery L.",
+            "author_info": "Los Angeles, CA"
+          }
+        },
+        "testimonial_zPGPBw": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Casey R.",
+            "author_info": "Toronto, ON"
+          }
+        },
+        "testimonial_Bq4fRB": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Morgan T.",
+            "author_info": "Vancouver, BC"
+          }
+        },
+        "testimonial_cxDgM4": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p>Share a favorite customer review here to highlight real experiences and build connection.</p>",
+            "author": "Riley S.",
+            "author_info": "Austin, TX"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_yMfdhQ",
+        "testimonial_bERQqF",
+        "testimonial_zPGPBw",
+        "testimonial_Bq4fRB",
+        "testimonial_cxDgM4"
+      ],
+      "name": "t:sections.testimonials.presets.testimonials.name",
+      "settings": {
+        "title": "Customer Reviews",
+        "heading_size": "h2",
+        "align_text": "center",
+        "round_images": true,
+        "color_background": "#f9f9f9",
+        "color_text": "#1c1d1d"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "testimonials_9XAbmb"
+  ]
+}

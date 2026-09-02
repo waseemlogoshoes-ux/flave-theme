@@ -1,0 +1,51 @@
+{
+  "type": "header",
+  "name": "t:sections.header-group.name",
+  "sections": {
+    "announcement": {
+      "type": "announcement",
+      "blocks": {
+        "announcement_XFKqNU": {
+          "type": "announcement",
+          "settings": {
+            "text": "FREE SHIPPING NATIONWIDE \ud83c\uddf5\ud83c\uddf0",
+            "link_text": "Free Shipping Nationwide \ud83c\uddf5\ud83c\uddf0",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_XFKqNU"
+      ],
+      "settings": {
+        "announcement_compact": false,
+        "sticky_on_scroll": false,
+        "sticky_on_mobile": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "shopify://shop_images/FLAVE_Logo.png",
+        "logo_inverted": "shopify://shop_images/FLAVE_Logo_wh.png",
+        "desktop_logo_width": 100,
+        "mobile_logo_width": 50,
+        "main_menu_link_list": "main-menu",
+        "hover_menu": true,
+        "main_menu_alignment": "center-drawer",
+        "header_style": "sticky",
+        "sticky_index": false,
+        "sticky_collection": false,
+        "toolbar_menu": "",
+        "toolbar_social": false,
+        "show_currency_selector": false,
+        "show_currency_flags": false,
+        "show_locale_selector": false
+      }
+    }
+  },
+  "order": [
+    "announcement",
+    "header"
+  ]
+}

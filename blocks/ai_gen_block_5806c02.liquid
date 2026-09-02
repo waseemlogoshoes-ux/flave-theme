@@ -1,0 +1,827 @@
+{% doc %}
+  @prompt
+    i need job anouncement page with out submition, need 3 to 5 job posting option
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-job-listings-{{ ai_gen_id }} {
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding }}px;
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-job-listings__header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .ai-job-listings__title-{{ ai_gen_id }} {
+    color: {{ block.settings.title_color }};
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+  }
+
+  .ai-job-listings__subtitle-{{ ai_gen_id }} {
+    color: {{ block.settings.subtitle_color }};
+    font-size: {{ block.settings.subtitle_size }}px;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .ai-job-listings__grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .ai-job-card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.card_background_color }};
+    border: 1px solid {{ block.settings.card_border_color }};
+    border-radius: {{ block.settings.card_border_radius }}px;
+    padding: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ai-job-card-{{ ai_gen_id }}:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-job-card__header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+
+  .ai-job-card__title-{{ ai_gen_id }} {
+    color: {{ block.settings.job_title_color }};
+    font-size: {{ block.settings.job_title_size }}px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .ai-job-card__badge-{{ ai_gen_id }} {
+    background-color: {{ block.settings.badge_color }};
+    color: {{ block.settings.badge_text_color }};
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .ai-job-card__meta-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .ai-job-card__meta-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: {{ block.settings.meta_color }};
+    font-size: 13px;
+  }
+
+  .ai-job-card__meta-icon-{{ ai_gen_id }} {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  .ai-job-card__description-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .ai-job-card__footer-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ai-job-card__salary-{{ ai_gen_id }} {
+    color: {{ block.settings.salary_color }};
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .ai-job-card__apply-btn-{{ ai_gen_id }} {
+    background-color: {{ block.settings.button_color }};
+    color: {{ block.settings.button_text_color }};
+    padding: 8px 16px;
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .ai-job-card__apply-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+  }
+
+  .ai-job-card__contact-{{ ai_gen_id }} {
+    color: {{ block.settings.contact_color }};
+    font-size: 12px;
+    text-decoration: none;
+  }
+
+  .ai-job-card__contact-{{ ai_gen_id }}:hover {
+    text-decoration: underline;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-job-listings__grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-job-card__header-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: flex-start;}
+
+    .ai-job-card__meta-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ai-job-card__footer-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-job-listings-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.section_title != blank or block.settings.section_subtitle != blank %}
+    <div class="ai-job-listings__header-{{ ai_gen_id }}">
+      {% if block.settings.section_title != blank %}
+        <h2 class="ai-job-listings__title-{{ ai_gen_id }}">{{ block.settings.section_title }}</h2>
+      {% endif %}
+      {% if block.settings.section_subtitle != blank %}
+        <p class="ai-job-listings__subtitle-{{ ai_gen_id }}">{{ block.settings.section_subtitle }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div class="ai-job-listings__grid-{{ ai_gen_id }}">
+    {% for i in (1..5) %}
+      {% liquid
+        assign job_enabled_key = 'job_' | append: i | append: '_enabled'
+        assign job_title_key = 'job_' | append: i | append: '_title'
+        assign job_type_key = 'job_' | append: i | append: '_type'
+        assign job_location_key = 'job_' | append: i | append: '_location'
+        assign job_department_key = 'job_' | append: i | append: '_department'
+        assign job_salary_key = 'job_' | append: i | append: '_salary'
+        assign job_description_key = 'job_' | append: i | append: '_description'
+        assign job_email_key = 'job_' | append: i | append: '_email'
+
+        assign job_enabled = block.settings[job_enabled_key]
+        assign job_title = block.settings[job_title_key]
+        assign job_type = block.settings[job_type_key]
+        assign job_location = block.settings[job_location_key]
+        assign job_department = block.settings[job_department_key]
+        assign job_salary = block.settings[job_salary_key]
+        assign job_description = block.settings[job_description_key]
+        assign job_email = block.settings[job_email_key]
+      %}
+
+      {% if job_enabled and job_title != blank %}
+        <div class="ai-job-card-{{ ai_gen_id }}">
+          <div class="ai-job-card__header-{{ ai_gen_id }}">
+            <h3 class="ai-job-card__title-{{ ai_gen_id }}">{{ job_title }}</h3>
+            {% if job_type != blank %}
+              <span class="ai-job-card__badge-{{ ai_gen_id }}">{{ job_type }}</span>
+            {% endif %}
+          </div>
+
+          <div class="ai-job-card__meta-{{ ai_gen_id }}">
+            {% if job_location != blank %}
+              <div class="ai-job-card__meta-item-{{ ai_gen_id }}">
+                <svg class="ai-job-card__meta-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>{{ job_location }}</span>
+              </div>
+            {% endif %}
+
+            {% if job_department != blank %}
+              <div class="ai-job-card__meta-item-{{ ai_gen_id }}">
+                <svg class="ai-job-card__meta-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                </svg>
+                <span>{{ job_department }}</span>
+              </div>
+            {% endif %}
+          </div>
+
+          {% if job_description != blank %}
+            <div class="ai-job-card__description-{{ ai_gen_id }}">
+              {{ job_description }}
+            </div>
+          {% endif %}
+
+          <div class="ai-job-card__footer-{{ ai_gen_id }}">
+            {% if job_salary != blank %}
+              <div class="ai-job-card__salary-{{ ai_gen_id }}">{{ job_salary }}</div>
+            {% endif %}
+            {% if job_email != blank %}
+              <a href="mailto:{{ job_email }}" class="ai-job-card__apply-btn-{{ ai_gen_id }}">
+                Apply Now
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Job listings",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section title",
+      "default": "Join Our Team"
+    },
+    {
+      "type": "text",
+      "id": "section_subtitle",
+      "label": "Section subtitle",
+      "default": "Explore exciting career opportunities and grow with us"
+    },
+    {
+      "type": "header",
+      "content": "Job position1"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_1_enabled",
+      "label": "Enable job position 1",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "job_1_title",
+      "label": "Job title",
+      "default": "Senior Software Engineer"
+    },
+    {
+      "type": "select",
+      "id": "job_1_type",
+      "label": "Job type",
+      "options": [
+        {
+          "value": "Full-time",
+          "label": "Full-time"
+        },
+        {
+          "value": "Part-time",
+          "label": "Part-time"
+        },
+        {
+          "value": "Contract",
+          "label": "Contract"
+        },
+        {
+          "value": "Remote",
+          "label": "Remote"
+        },
+        {
+          "value": "Internship",
+          "label": "Internship"
+        }
+      ],
+      "default": "Full-time"
+    },
+    {
+      "type": "text",
+      "id": "job_1_location",
+      "label": "Location",
+      "default": "New York, NY"
+    },
+    {
+      "type": "text",
+      "id": "job_1_department",
+      "label": "Department",
+      "default": "Engineering"
+    },
+    {
+      "type": "text",
+      "id": "job_1_salary",
+      "label": "Salary range",
+      "default": "$80,000 - $120,000"
+    },
+    {
+      "type": "textarea",
+      "id": "job_1_description",
+      "label": "Job description",
+      "default": "We are looking for a talented Software Engineer to join our growing team. You will be responsible for developing high-quality software solutions."
+    },
+    {
+      "type": "text",
+      "id": "job_1_email",
+      "label": "Contact email",
+      "default": "careers@company.com"
+    },
+    {
+      "type": "header",
+      "content": "Job position 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_2_enabled",
+      "label": "Enable job position 2",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "job_2_title",
+      "label": "Job title",
+      "default": "Marketing Manager"
+    },
+    {
+      "type": "select",
+      "id": "job_2_type",
+      "label": "Job type",
+      "options": [
+        {
+          "value": "Full-time",
+          "label": "Full-time"
+        },
+        {
+          "value": "Part-time",
+          "label": "Part-time"
+        },
+        {
+          "value": "Contract",
+          "label": "Contract"
+        },
+        {
+          "value": "Remote",
+          "label": "Remote"
+        },
+        {
+          "value": "Internship",
+          "label": "Internship"
+        }
+      ],
+      "default": "Full-time"
+    },
+    {
+      "type": "text",
+      "id": "job_2_location",
+      "label": "Location",
+      "default": "San Francisco, CA"
+    },
+    {
+      "type": "text",
+      "id": "job_2_department",
+      "label": "Department",
+      "default": "Marketing"
+    },
+    {
+      "type": "text",
+      "id": "job_2_salary",
+      "label": "Salary range",
+      "default": "$60,000 - $90,000"
+    },
+    {
+      "type": "textarea",
+      "id": "job_2_description",
+      "label": "Job description",
+      "default": "Join our marketing team to drive brand awareness and lead generation through innovative campaigns and strategies."
+    },
+    {
+      "type": "text",
+      "id": "job_2_email",
+      "label": "Contact email",
+      "default": "marketing@company.com"
+    },
+    {
+      "type": "header",
+      "content": "Job position 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_3_enabled",
+      "label": "Enable job position 3",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "job_3_title",
+      "label": "Job title",
+      "default": "UX Designer"
+    },
+    {
+      "type": "select",
+      "id": "job_3_type",
+      "label": "Job type",
+      "options": [
+        {
+          "value": "Full-time",
+          "label": "Full-time"
+        },
+        {
+          "value": "Part-time",
+          "label": "Part-time"
+        },
+        {
+          "value": "Contract",
+          "label": "Contract"
+        },
+        {
+          "value": "Remote",
+          "label": "Remote"
+        },
+        {
+          "value": "Internship",
+          "label": "Internship"
+        }
+      ],
+      "default": "Full-time"
+    },
+    {
+      "type": "text",
+      "id": "job_3_location",
+      "label": "Location",
+      "default": "Remote"
+    },
+    {
+      "type": "text",
+      "id": "job_3_department",
+      "label": "Department",
+      "default": "Design"
+    },
+    {
+      "type": "text",
+      "id": "job_3_salary",
+      "label": "Salary range",
+      "default": "$70,000 - $100,000"
+    },
+    {
+      "type": "textarea",
+      "id": "job_3_description",
+      "label": "Job description",
+      "default": "Create exceptional user experiences through research, wireframing, prototyping, and collaboration with development teams."
+    },
+    {
+      "type": "text",
+      "id": "job_3_email",
+      "label": "Contact email",
+      "default": "design@company.com"
+    },
+    {
+      "type": "header",
+      "content": "Job position 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_4_enabled",
+      "label": "Enable job position 4"
+    },
+    {
+      "type": "text",
+      "id": "job_4_title",
+      "label": "Job title",
+      "default": "Sales Representative"
+    },
+    {
+      "type": "select",
+      "id": "job_4_type",
+      "label": "Job type",
+      "options": [
+        {
+          "value": "Full-time",
+          "label": "Full-time"
+        },
+        {
+          "value": "Part-time",
+          "label": "Part-time"
+        },
+        {
+          "value": "Contract",
+          "label": "Contract"
+        },
+        {
+          "value": "Remote",
+          "label": "Remote"
+        },
+        {
+          "value": "Internship",
+          "label": "Internship"
+        }
+      ],
+      "default": "Full-time"
+    },
+    {
+      "type": "text",
+      "id": "job_4_location",
+      "label": "Location",
+      "default": "Chicago, IL"
+    },
+    {
+      "type": "text",
+      "id": "job_4_department",
+      "label": "Department",
+      "default": "Sales"
+    },
+    {
+      "type": "text",
+      "id": "job_4_salary",
+      "label": "Salary range",
+      "default": "$50,000 - $80,000"
+    },
+    {
+      "type": "textarea",
+      "id": "job_4_description",
+      "label": "Job description",
+      "default": "Drive revenue growth by building relationships with prospects and closing deals in a fast-paced environment."
+    },
+    {
+      "type": "text",
+      "id": "job_4_email",
+      "label": "Contact email",
+      "default": "sales@company.com"
+    },
+    {
+      "type": "header",
+      "content": "Job position 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "job_5_enabled",
+      "label": "Enable job position 5"
+    },
+    {
+      "type": "text",
+      "id": "job_5_title",
+      "label": "Job title",
+      "default": "Customer Success Manager"
+    },
+    {
+      "type": "select",
+      "id": "job_5_type",
+      "label": "Job type",
+      "options": [
+        {
+          "value": "Full-time",
+          "label": "Full-time"
+        },
+        {
+          "value": "Part-time",
+          "label": "Part-time"
+        },
+        {
+          "value": "Contract",
+          "label": "Contract"
+        },
+        {
+          "value": "Remote",
+          "label": "Remote"
+        },
+        {
+          "value": "Internship",
+          "label": "Internship"
+        }
+      ],
+      "default": "Full-time"
+    },
+    {
+      "type": "text",
+      "id": "job_5_location",
+      "label": "Location",
+      "default": "Austin, TX"
+    },
+    {
+      "type": "text",
+      "id": "job_5_department",
+      "label": "Department",
+      "default": "Customer Success"
+    },
+    {
+      "type": "text",
+      "id": "job_5_salary",
+      "label": "Salary range",
+      "default": "$55,000 - $75,000"
+    },
+    {
+      "type": "textarea",
+      "id": "job_5_description",
+      "label": "Job description",
+      "default": "Ensure customer satisfaction and retention by providing exceptional support and building long-term relationships."
+    },
+    {
+      "type": "text",
+      "id": "job_5_email",
+      "label": "Contact email",
+      "default": "support@company.com"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Section title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Section subtitle color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#e8e8e1"
+    },
+    {
+      "type": "color",
+      "id": "job_title_color",
+      "label": "Job title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#494949"
+    },
+    {
+      "type": "color",
+      "id": "meta_color",
+      "label": "Meta text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "salary_color",
+      "label": "Salary color",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "Badge background color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "contact_color",
+      "label": "Contact link color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Section title size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Section subtitle size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "job_title_size",
+      "min": 16,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Job title size",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Section border radius",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Card border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Job listings"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,127 @@
+{% stylesheet %}
+  .category-buttons {
+    padding: 20px 0;
+  }
+
+  .category-buttons__wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .category-buttons__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    padding: 18px 32px;
+    background: #f5f2ec;
+    color: #1f1f1f;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 16px;
+    line-height: 1;
+    transition: all 0.25s ease;
+  }
+
+  .category-buttons__item:hover {
+    background: #e4e0da;
+  }
+
+  @media screen and (max-width: 749px) {
+    .category-buttons__wrapper {
+      gap: 16px;
+    }
+
+    .category-buttons__item {
+      width: calc(50% - 8px);
+      min-width: unset;
+      padding: 16px 20px;
+      font-size: 14px;
+      width: auto;
+    }
+  }
+{% endstylesheet %}
+
+<div class="category-buttons">
+  <div class="category-buttons__wrapper">
+    {% for block in section.blocks %}
+      <a
+        href="{{ block.settings.link }}"
+        class="category-buttons__item"
+        {{ block.shopify_attributes }}
+      >
+        {{ block.settings.label }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Category Buttons",
+  "tag": "section",
+  "class": "section-category-buttons",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 32,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button text",
+          "default": "BUTTON"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Buttons",
+      "blocks": [
+        {
+          "type": "button"
+        },
+        {
+          "type": "button"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
