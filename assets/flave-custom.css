@@ -73,78 +73,7 @@ body {
   box-shadow: 0 2px 20px rgba(44,32,23,0.08) !important;
 }
 
-/* ── DRAWER / SIDE NAVIGATION ── */
-.drawer {
-  background-color: var(--flave-cream) !important;
-  width: 32vw !important;
-  max-width: 460px !important;
-  border-left: 1px solid var(--flave-border) !important;
-  box-shadow: -8px 0 40px rgba(44,32,23,0.12) !important;
-}
-@media (max-width: 768px) {
-  .drawer {
-    width: 88vw !important;
-    max-width: 420px !important;
-  }
-}
-.drawer--right {
-  transform: translateX(100%) !important;
-  transition: transform 0.38s cubic-bezier(0.16,1,0.3,1) !important;
-}
-.drawer--left {
-  transform: translateX(-100%) !important;
-  transition: transform 0.38s cubic-bezier(0.16,1,0.3,1) !important;
-}
-.js-drawer-open .drawer--right {
-  transform: translateX(0) !important;
-}
-.js-drawer-open-nav .drawer--left,
-.js-drawer-open--nav .drawer--left {
-  transform: translateX(0) !important;
-}
-
-/* Drawer overlay */
-#PageContainer::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: rgba(44,32,23,0.45);
-  z-index: 9;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.38s ease;
-}
-.js-drawer-open #PageContainer::before {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Drawer nav items */
-.mobile-nav__link--top-level {
-  font-size: 14px !important;
-  letter-spacing: 0.16em !important;
-  text-transform: uppercase !important;
-  color: var(--flave-text) !important;
-  padding: 14px 0 !important;
-  font-weight: 400 !important;
-}
-.mobile-nav__item {
-  border-bottom: 1px solid var(--flave-border) !important;
-}
-.mobile-nav__item:last-child {
-  border-bottom: none !important;
-}
-.mobile-nav__link--top-level:hover {
-  color: var(--flave-burgundy) !important;
-}
-
-/* Drawer close button */
-.drawer__close-button {
-  color: var(--flave-text) !important;
-}
-.drawer__close-button:hover {
-  color: var(--flave-burgundy) !important;
-}
+/* Drawer styles moved to drawer-menu.liquid */
 
 /* ── HERO / SLIDESHOW SECTION ── */
 .slideshow__slide {
@@ -764,4 +693,29 @@ p, .rte p {
 }
 .breadcrumb span {
   color: var(--flave-text-lt) !important;
+}
+
+/* ── SMART SCROLL HEADER ── */
+.header-sticky-wrapper {
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
+              box-shadow 0.35s ease !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 200 !important;
+}
+.header-sticky-wrapper.header--hidden {
+  transform: translateY(-100%) !important;
+  box-shadow: none !important;
+}
+.header-sticky-wrapper.header--scrolled {
+  box-shadow: 0 2px 20px rgba(44,32,23,0.09) !important;
+}
+.site-header {
+  transition: none !important;
+}
+
+/* ── PAGE LOAD FADE ── */
+body {
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
